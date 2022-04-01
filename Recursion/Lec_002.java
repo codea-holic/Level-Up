@@ -109,7 +109,8 @@ public class Lec_002 {
             return 0;
         }
         int count = 0;
-
+        if(tar - coins[idx] >= 0) count += coinChangeCombination_Sin_Sub(coins, idx + 1, tar - coins[idx], psf + coins[idx] + " ");
+        count += coinChangeCombination_Sin_Sub(coins, idx + 1, tar, psf);
         return count;
     }
 
@@ -122,7 +123,13 @@ public class Lec_002 {
             return 0;
         }
         int count = 0;
-
+        if(coins[idx] > 0 && tar - coins[idx] >= 0){
+            int val = coins[idx];
+            coins[idx] = -coins[idx];
+            count += coinChangePermutation_Sin_Sub(coins, 0, tar - val, psf + val + " ");
+            coins[idx] = -coins[idx];
+        }
+        count += coinChangePermutation_Sin_Sub(coins, idx + 1, tar, psf);
         return count;
     }
 
@@ -133,6 +140,8 @@ public class Lec_002 {
         // System.out.println(coinChangeCombination_IN(coins, 0, 10, ""));
         // System.out.println(coinChangePermutation_Sin(coins, 10, ""));
         // System.out.println(coinChangeCombination_IN_Sub(coins, 0, 10, ""));
-        System.out.println(coinChangePermutation_IN_Sub(coins, 0, 10, ""));
+        // System.out.println(coinChangePermutation_IN_Sub(coins, 0, 10, ""));
+        // System.out.println(coinChangeCombination_Sin_Sub(coins, 0, 10, ""));
+        System.out.println(coinChangePermutation_Sin_Sub(coins, 0, 10, ""));
     }
 }
