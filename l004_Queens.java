@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class l004_Queen {
+public class l004_Queens {
 
     // tnq : total no of queens, qpsf : queen placed so far
     public static int queenCombination1D(boolean[] boxes, int tnq, int bno, int qpsf, String psf) {
@@ -184,13 +184,14 @@ public class l004_Queen {
 
     public static void main(String... args) {
         // System.out.println(queenCombination1D(boxes, 3, 0, 0, ""));
-        // System.out.println(queenPermutation1D(boxes, 3, 0, ""));
-        boolean[][] boxes = new boolean[4][4];
+        // boolean[][] boxes = new boolean[4][4];
+        boolean [] boxes = new boolean[5];
+        System.out.println(queenPermutation1D(boxes, 3, 0, ""));
         // System.out.println(queenCombination2D(boxes, 4, 0, ""));
         // System.out.println(queenPermutation2D(boxes, 4, ""));
 
         // System.out.println(nqueen_01(boxes, 4, 0, ""));
-        System.out.println(nqueen_01_Perm(boxes, 4, ""));
+        // System.out.println(nqueen_01_Perm(boxes, 4, ""));
     }
 
 }
