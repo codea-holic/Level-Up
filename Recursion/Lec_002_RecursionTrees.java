@@ -1,5 +1,5 @@
 
-public class Lec_002 {
+public class Lec_002_RecursionTrees {
 
     // coin Change Combination Infinite Coins available
     public static int coinChangeCombination_IN(int [] coins, int idx, int tar, String psf) {

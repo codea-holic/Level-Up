@@ -1,4 +1,4 @@
-public class Lec_001 {
+public class Lec_001_MazePath {
 
     public static int mazePath(int sr, int sc, int er, int ec, int [][] dir, String [] dirS, String psf){
         if(sr == er && sc == ec){

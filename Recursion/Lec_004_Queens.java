@@ -1,4 +1,4 @@
-public class Lec_004 {
+public class Lec_004_Queens {
 
     public static int nQueensCombn(int [] boxes, int queens, int idx, int qpsf, String psf){
         if(qpsf == queens){
