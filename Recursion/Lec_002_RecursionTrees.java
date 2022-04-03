@@ -2,15 +2,15 @@
 public class Lec_002_RecursionTrees {
 
     // coin Change Combination Infinite Coins available
-    public static int coinChangeCombination_IN(int [] coins, int idx, int tar, String psf) {
-        if(tar == 0){
+    public static int coinChangeCombination_IN(int[] coins, int idx, int tar, String psf) {
+        if (tar == 0) {
             System.out.println(psf);
             return 1;
         }
         int count = 0;
 
-        for(int i = idx; i < coins.length; i++){
-            if(tar - coins[i] >= 0){
+        for (int i = idx; i < coins.length; i++) {
+            if (tar - coins[i] >= 0) {
                 count += coinChangeCombination_IN(coins, i, tar - coins[i], psf + coins[i]);
             }
         }
@@ -31,32 +31,32 @@ public class Lec_002_RecursionTrees {
         }
         return count;
     }
- 
+
     // coin Change Combination Use each coin once
-    public static int coinChangeCombination_Sin(int [] coins, int idx, int tar, String psf) {
-        if(tar == 0){
+    public static int coinChangeCombination_Sin(int[] coins, int idx, int tar, String psf) {
+        if (tar == 0) {
             System.out.println(psf);
             return 1;
         }
         int count = 0;
-        for(int i = idx; i < coins.length; i++){
-            if(tar - coins[i] >= 0){
-                count += coinChangeCombination_Sin(coins, i+1, tar - coins[i], psf + coins[i]);
+        for (int i = idx; i < coins.length; i++) {
+            if (tar - coins[i] >= 0) {
+                count += coinChangeCombination_Sin(coins, i + 1, tar - coins[i], psf + coins[i]);
             }
         }
         return count;
     }
 
-    public static int coinChangePermutation_Sin(int [] coins, int tar, String psf) {
-        if(tar == 0){
+    public static int coinChangePermutation_Sin(int[] coins, int tar, String psf) {
+        if (tar == 0) {
             System.out.println(psf);
             return 1;
         }
         int count = 0;
-        for(int i = 0; i < coins.length; i++){
-            if(tar - coins[i] >= 0){
+        for (int i = 0; i < coins.length; i++) {
+            if (tar - coins[i] >= 0) {
                 int val = coins[i];
-                coins[i] = (int)1e9;
+                coins[i] = (int) 1e9;
                 count += coinChangePermutation_Sin(coins, tar - val, psf + val);
                 coins[i] = val;
             }
@@ -66,9 +66,9 @@ public class Lec_002_RecursionTrees {
 
     // Do homework of Write all combination and Permutation with subsequence method
     // And Also draw trees and find relation with 2^n(Binary).
-    public static int coinChangeCombination_IN_Sub(int [] coins, int idx, int tar, String psf){
-        if(idx == coins.length || tar == 0){
-            if(tar == 0){
+    public static int coinChangeCombination_IN_Sub(int[] coins, int idx, int tar, String psf) {
+        if (idx == coins.length || tar == 0) {
+            if (tar == 0) {
                 System.out.println(psf);
                 return 1;
             }
@@ -76,23 +76,23 @@ public class Lec_002_RecursionTrees {
         }
 
         int count = 0;
-        if(tar - coins[idx] >= 0){
+        if (tar - coins[idx] >= 0) {
             count += coinChangeCombination_IN_Sub(coins, idx, tar - coins[idx], psf + coins[idx] + " ");
         }
         count += coinChangeCombination_IN_Sub(coins, idx + 1, tar, psf);
         return count;
     }
 
-    public static int coinChangePermutation_IN_Sub(int [] coins, int idx, int tar, String psf){
-        if(idx == coins.length || tar == 0){
-            if(tar == 0){
+    public static int coinChangePermutation_IN_Sub(int[] coins, int idx, int tar, String psf) {
+        if (idx == coins.length || tar == 0) {
+            if (tar == 0) {
                 System.out.println(psf);
                 return 1;
             }
             return 0;
         }
         int count = 0;
-        if(tar - coins[idx] >= 0){
+        if (tar - coins[idx] >= 0) {
             count += coinChangePermutation_IN_Sub(coins, 0, tar - coins[idx], psf + coins[idx] + " ");
         }
         count += coinChangePermutation_IN_Sub(coins, idx + 1, tar, psf);
@@ -100,30 +100,31 @@ public class Lec_002_RecursionTrees {
         return count;
     }
 
-    public static int coinChangeCombination_Sin_Sub(int [] coins, int idx, int tar, String psf){
-        if(idx == coins.length || tar == 0){
-            if(tar == 0){
+    public static int coinChangeCombination_Sin_Sub(int[] coins, int idx, int tar, String psf) {
+        if (idx == coins.length || tar == 0) {
+            if (tar == 0) {
                 System.out.println(psf);
                 return 1;
             }
             return 0;
         }
         int count = 0;
-        if(tar - coins[idx] >= 0) count += coinChangeCombination_Sin_Sub(coins, idx + 1, tar - coins[idx], psf + coins[idx] + " ");
+        if (tar - coins[idx] >= 0)
+            count += coinChangeCombination_Sin_Sub(coins, idx + 1, tar - coins[idx], psf + coins[idx] + " ");
         count += coinChangeCombination_Sin_Sub(coins, idx + 1, tar, psf);
         return count;
     }
 
-    public static int coinChangePermutation_Sin_Sub(int [] coins, int idx, int tar, String psf){
-        if(idx == coins.length || tar == 0){
-            if(tar == 0){
+    public static int coinChangePermutation_Sin_Sub(int[] coins, int idx, int tar, String psf) {
+        if (idx == coins.length || tar == 0) {
+            if (tar == 0) {
                 System.out.println(psf);
                 return 1;
             }
             return 0;
         }
         int count = 0;
-        if(coins[idx] > 0 && tar - coins[idx] >= 0){
+        if (coins[idx] > 0 && tar - coins[idx] >= 0) {
             int val = coins[idx];
             coins[idx] = -coins[idx];
             count += coinChangePermutation_Sin_Sub(coins, 0, tar - val, psf + val + " ");
