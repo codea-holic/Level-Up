@@ -204,13 +204,31 @@ public class Lec_004_Queens {
         int count = 0;
         int r = bno / boxes[0].length;
         int c = bno % boxes[0].length;
-        if (isQueenSafe(boxes, r, c)) {
+        if (isQueenSafeVector(boxes, r, c)) {
             boxes[r][c] = true;
             count += nQueens(boxes, bno + 1, tnq, qpsf + 1, psf + "(" + r + "," + c + ")" + " ");
             boxes[r][c] = false;
         }
         count += nQueens(boxes, bno + 1, tnq, qpsf, psf);
         return count;
+    }
+
+
+    public static boolean isQueenSafeVector(boolean [][] board, int r, int c){
+
+        int [][] dir = {{0, -1}, {-1, -1}, {-1, 0}, {-1, 1}, {1, 0}, {0, 1}, {1, 1}, {1, -1}};
+        int n = board.length;
+        for(int d = 0; d < dir.length; d++){
+            for(int rad = 1; rad <= n; rad++){
+                int x = r + rad * dir[d][0];
+                int y = c + rad * dir[d][1];
+
+                if(x >= 0 && y >= 0 && x < n && y < n){
+                    if(board[x][y]) return false;
+                } else break;
+            }
+        }
+        return true;
     }
 
     public static int nQueensOptimal(boolean[][] boxes, int rowNo, int tnq, String psf) {
@@ -233,8 +251,26 @@ public class Lec_004_Queens {
         return count;
     }
 
+    public static int nQueensPermutation(boolean [][] board, int tnq, String psf){
+        if(tnq == 0){
+            System.out.println(psf);
+            return 1;
+        }
+
+        int count = 0, n = board.length; 
+        for(int i = 0; i < n * n; i++){
+            int r = i / n, c = i % n;
+            if(!board[r][c] && isQueenSafeVector(board, r, c)){
+                board[r][c] = true;
+                count += nQueensPermutation(board, tnq - 1, psf + "(" + r + "," + c + ")" + " ");
+                board[r][c] = false;
+            }
+        }
+
+        return count;
+    }
     public static void main(String[] args) {
-        boolean[] places = new boolean[5];`
+        boolean[] places = new boolean[5];
         // System.out.println(queenCombination1D(places, 3, 0, 0, ""));
         // System.out.println(queenCombination1D_Sub(places, 3, 0, 0, ""));
         // System.out.println(queenPermutation1D(places, 3, 0, ""));
@@ -244,7 +280,8 @@ public class Lec_004_Queens {
         // System.out.println(queensCombination2D(boxes, 0, 3, 0, ""));
         // System.out.println(queensPermutation2D(boxes, 3, 0, ""));
         // System.out.println(queensPermutation2D_Sub(boxes, 0, 3, 0, ""));
-        System.out.println(nQueens(boxes, 0, 4, 0, ""));
+        // System.out.println(nQueens(boxes, 0, 4, 0, ""));
         System.out.println(nQueensOptimal(boxes, 0, 4, ""));
+        System.out.println(nQueensPermutation(boxes, 4, ""));
     }
 }
