@@ -124,7 +124,7 @@ public class Lec_004_Queens {
 
     public static int queensPermutation2D_Sub(boolean[][] boxes, int bno, int tnq, int qpsf, String psf) {
         if (bno >= boxes.length * boxes[0].length || tnq == qpsf) {
-            if(tnq == qpsf){
+            if (tnq == qpsf) {
                 System.out.println(psf);
                 return 1;
             }
@@ -146,16 +146,105 @@ public class Lec_004_Queens {
         return count;
     }
 
+    public static boolean isQueenSafe(boolean[][] boxes, int r, int c) {
+
+        for (int j = 0, i = r; j < boxes[0].length; j++) {
+            if (boxes[i][j]) {
+                return false;
+            }
+        }
+
+        for (int i = 0, j = c; i < boxes.length; i++) {
+            if (boxes[i][j]) {
+                return false;
+            }
+        }
+
+        for (int i = r, j = c; i < boxes.length && j < boxes[0].length; i++, j++) {
+            if (boxes[i][j])
+                return false;
+        }
+
+        for (int i = r, j = c; i >= 0 && j >= 0; i--, j--) {
+            if (boxes[i][j])
+                return false;
+        }
+
+        for (int i = r, j = c; i >= 0 && j < boxes[0].length; i--, j++) {
+            if (boxes[i][j])
+                return false;
+        }
+
+        for (int i = r, j = c; j >= 0 && i < boxes.length; i++, j--) {
+            if (boxes[i][j])
+                return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Not Optimized:
+     * We not need to check for each and every box because, We can say that every
+     * row contains only one queen So, as soon as we placed any queen we change the
+     * row, then it will be Optimized.
+     * @tnq : total no. of Queens
+     * @qpsf : queen placed so far
+     * @psf : path so far
+     */
+    public static int nQueens(boolean[][] boxes, int bno, int tnq, int qpsf, String psf) {
+        if (bno >= boxes.length * boxes[0].length || tnq == qpsf) {
+            if (tnq == qpsf) {
+                System.out.println(psf);
+                return 1;
+            }
+            return 0;
+        }
+
+        int count = 0;
+        int r = bno / boxes[0].length;
+        int c = bno % boxes[0].length;
+        if (isQueenSafe(boxes, r, c)) {
+            boxes[r][c] = true;
+            count += nQueens(boxes, bno + 1, tnq, qpsf + 1, psf + "(" + r + "," + c + ")" + " ");
+            boxes[r][c] = false;
+        }
+        count += nQueens(boxes, bno + 1, tnq, qpsf, psf);
+        return count;
+    }
+
+    public static int nQueensOptimal(boolean[][] boxes, int rowNo, int tnq, String psf) {
+        if(rowNo >= boxes.length || tnq == 0){
+            if(tnq == 0){
+                System.out.println(psf);
+                return 1;
+            }
+            return 0;
+        }
+        int count = 0;
+        for(int i = rowNo, j = 0; j < boxes[0].length; j++){
+            if(isQueenSafe(boxes, i, j)){
+                boxes[i][j] = true;
+                count += nQueensOptimal(boxes, rowNo + 1, tnq - 1, psf + "(" + i + "," + j + ")" + " ");
+                boxes[i][j] = false;
+            }
+            count += nQueensOptimal(boxes, rowNo + 1, tnq, psf);
+        }
+        return count;
+    }
+
     public static void main(String[] args) {
-        boolean[] places = new boolean[5];
+        boolean[] places = new boolean[5];`
         // System.out.println(queenCombination1D(places, 3, 0, 0, ""));
         // System.out.println(queenCombination1D_Sub(places, 3, 0, 0, ""));
         // System.out.println(queenPermutation1D(places, 3, 0, ""));
         // System.out.println(queenPermutation1D_Sub(places, 0, 3, 0, ""));
-        boolean[][] boxes = new boolean[3][3];
+        boolean[][] boxes = new boolean[4][4];
         // System.out.println(queensCombination2D_Sub(boxes, 0, 3, 0, ""));
         // System.out.println(queensCombination2D(boxes, 0, 3, 0, ""));
         // System.out.println(queensPermutation2D(boxes, 3, 0, ""));
-        System.out.println(queensPermutation2D_Sub(boxes, 0, 3, 0, ""));
+        // System.out.println(queensPermutation2D_Sub(boxes, 0, 3, 0, ""));
+        System.out.println(nQueens(boxes, 0, 4, 0, ""));
+        System.out.println(nQueensOptimal(boxes, 0, 4, ""));
     }
 }
