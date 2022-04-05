@@ -270,7 +270,7 @@ public class Lec_004_Queens {
         return count;
     }
     public static void main(String[] args) {
-        boolean[] places = new boolean[5];
+        // boolean[] places = new boolean[5];
         // System.out.println(queenCombination1D(places, 3, 0, 0, ""));
         // System.out.println(queenCombination1D_Sub(places, 3, 0, 0, ""));
         // System.out.println(queenPermutation1D(places, 3, 0, ""));
