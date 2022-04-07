@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -159,5 +160,83 @@ public class Lec_005_Sudoku {
 
     public static void main(String[] args) {
         crypto();
+    }
+}
+
+// 1307
+
+class Solution {
+    public boolean isSolvable(String[] words, String result) {
+        HashSet<Character> hset = new HashSet<>();
+        for (String word : words) {
+            for (int i = 0; i < word.length(); i++) {
+                char ch = word.charAt(i);
+                hset.add(ch);
+            }
+        }
+        for (int i = 0; i < result.length(); i++) {
+            char ch = result.charAt(i);
+            hset.add(ch);
+        }
+
+        String str = new String();
+        for (Character c : hset) {
+            str += c;
+        }
+
+        boolean[] possibleNumbers = new boolean[10];
+        HashMap<Character, Integer> map = new HashMap<>();
+        int n = isSolvable(words, str, 0, possibleNumbers, map, result);
+        return n == 0 ? false : true;
+    }
+
+    private int isSolvable(String[] words, String str, int idx, boolean[] p, HashMap<Character, Integer> map,
+            String result) {
+        // base case;
+        if (idx == str.length()) {
+            if (isValid(words, result, map)) {
+                return 1;
+            }
+            return 0;
+        }
+
+        char c = str.charAt(idx);
+        int count = 0;
+        for (int i = 0; i < 10; i++) {
+            if (!p[i]) {
+                p[i] = true;
+                map.put(c, i);
+                count += isSolvable(words, str, idx + 1, p, map, result);
+                map.remove(c);
+                p[i] = false;
+            }
+        }
+
+        return count;
+    }
+
+    private boolean isValid(String [] words, String result, HashMap<Character, Integer> map){
+        
+        int res = 0;
+        for(String word : words){
+            if(map.get(word.charAt(0)) == 0) return false;
+        }
+
+        for(String word : words){
+            int num = convertToNumber(word, map);
+            res += num;
+        }
+        
+        int resultVal = convertToNumber(result, map);
+        return res == resultVal;
+    }
+
+    private int convertToNumber(String word, HashMap<Character, Integer> map) {
+        int res = 0;
+        for(int i = 0; i < word.length(); i++){
+            char ch = word.charAt(i);
+            res = res * 10 + map.get(ch);
+        }
+        return res;
     }
 }
