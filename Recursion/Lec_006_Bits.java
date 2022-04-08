@@ -104,11 +104,30 @@ public class Lec_006_Bits {
         return ans;
     }
 
-    
+    // 137.
+    public static int singleNumber2(int [] nums, int k){
 
-    public static void main(String[] args) {
-        System.out.println(setTrue(10, 1));
-        System.out.println(setFalse(10, 1));
+        int mask = (1 << 31);
+        int ans = 0;
+        while(mask != 0){
+            int count = 0;
+            for(int val : nums){
+                if((val & mask) > 0){
+                    count++;
+                }
+            }
+            if(count % k != 0){
+                ans += mask;
+            }
+            mask >>>= 1;
+        }
+        return ans;
     }
 
+    public static void main(String[] args) {
+        // System.out.println(setTrue(10, 1));
+        // System.out.println(setFalse(10, 1));
+        int [] nums = {2, 2, -3, 2};
+        System.out.println(singleNumber2(nums, 3));
+    }
 }
