@@ -1,6 +1,3 @@
-import java.util.HashMap;
-import java.util.HashSet;
-
 public class Lec_006_Bits {
 
     public static int setTrue(int x, int idx) {
