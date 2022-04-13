@@ -64,6 +64,7 @@ public class Lec_001 {
         return length;
     }
 
+    // 234
     public boolean isPalindrome(ListNode head){
         if(head == null || head.next == null) return true;
 
@@ -73,15 +74,21 @@ public class Lec_001 {
 
         ListNode forw = head;
         ListNode back = reverseLL;
+        boolean res = true;
         while(back != null){
-            if(forw.val != back.val) return false;
+            if(forw.val != back.val) {
+                res = false;
+                break;
+            }
             forw = forw.next;
             back = back.next;
         }
 
-        return true;
+        mid.next = reverseLinkedList(reverseLL);
+        return res;
     }
 
+    //
     public static void main(String[] args) {
         
     }
