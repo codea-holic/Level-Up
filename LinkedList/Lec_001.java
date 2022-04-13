@@ -24,7 +24,7 @@ public class Lec_001 {
         return slow;
     }
 
-    // It return "SECOND" mid node in even Linked List
+    // It return "SECOND" mid node in even Linked List : NOT USED
     public ListNode middleNodeSecond(ListNode head) {
         if(head == null || head.next == null) return head;
 
@@ -86,7 +86,7 @@ public class Lec_001 {
 
         mid.next = reverseLinkedList(reverseLL);
         return res;
-    }
+    } 
 
     //
     public static void main(String[] args) {
