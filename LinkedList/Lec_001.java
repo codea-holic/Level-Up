@@ -1,7 +1,8 @@
-
+package LinkedList;
 // for singly-linked list.
 
 public class Lec_001 {
+    
     class ListNode {
         int val;
         ListNode next;

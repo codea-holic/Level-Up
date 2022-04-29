@@ -1,3 +1,4 @@
+// package LinkedList;
 public class Lec_002 {
     static class ListNode {
         int val;
@@ -112,6 +113,34 @@ public class Lec_002 {
         return odd.next;
     }
     
+    static ListNode tH = null;
+    static ListNode tT = null;
+    private static void addLast(ListNode node){
+        if(tH == null){
+            tH = tT = node;
+            node.next = null;
+            return;
+        }
+        tT.next = node;
+        tT = tT.next;
+        node.next = null;
+        printList(tH);
+    }
+    public static ListNode removeElements(ListNode head, int val) {
+        
+        ListNode curr = head;
+        while(curr != null){
+            if(curr.val != val){
+                ListNode prev = curr;
+                curr = curr.next;
+                // prev.next = null;
+                addLast(prev);
+            } else{
+                curr = curr.next;
+            }
+        }
+        return tH;
+    }
     public static void main(String[] args) {
         ListNode head1 = null;
         ListNode node = new ListNode(1);
@@ -120,7 +149,7 @@ public class Lec_002 {
         head1 = node;
         
         ListNode head2 = null;
-        ListNode temp = new ListNode(4);
+        ListNode temp = new ListNode(3);
         temp.next = new ListNode(5);
         temp.next.next = new ListNode(6);
         // head2 = temp;
@@ -129,9 +158,10 @@ public class Lec_002 {
         // System.out.println(isBigger(head2, head1));
         // ListNode head = removeDuplicates(head1);
         printList(head1);
-        ListNode head = oddEvenList(head1);
+        // ListNode head = oddEvenList(head1);
+        ListNode head = removeElements(head1, 3);
         printList(head);
     }
-
-    
 }
+
+// Ctrl + k + Ctrl + 0 -> collapse all
