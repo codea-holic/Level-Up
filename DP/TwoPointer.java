@@ -160,34 +160,72 @@ public class TwoPointer {
 
     // 746.
 
-    // ?? WRONG
-    public static int minCostClimbingStairsRecursion(int n, int[] cost) {
-        if (n <= 1) {
-            return cost[n];
-        }
-
-        int fCall = minCostClimbingStairsRecursion(n - 1, cost);
-        int sCall = minCostClimbingStairsRecursion(n - 2, cost);
-        return Math.min(fCall, sCall) + cost[n];
-    }
-
-    // ?? WRONG
-    public static int minCostClimbingStairs_memo(int n, int[] cost, int[] dp) {
+    public int minCostClimbingStairs_memo(int[] cost, int n, int[] dp) {
         if (n <= 1) {
             return dp[n] = cost[n];
         }
+
         if (dp[n] != 0)
             return dp[n];
-        return dp[n] = Math.min(minCostClimbingStairs_memo(n - 1, cost, dp),
-                minCostClimbingStairs_memo(n - 2, cost, dp)) + cost[n];
+
+        int fcall = minCostClimbingStairs_memo(cost, n - 1, dp);
+        int scall = minCostClimbingStairs_memo(cost, n - 2, dp);
+        int ans = Math.min(fcall, scall) + (n == cost.length ? 0 : cost[n]);
+
+        return dp[n] = ans;
+    }
+
+    public int minCostClimbingStairs_tabu(int[] cost, int N, int[] dp) {
+        for (int n = 0; n <= N; n++) {
+            if (n <= 1) {
+                dp[n] = cost[n];
+                continue;
+            }
+
+            dp[n] = Math.min(dp[n - 1], dp[n - 2]) + (n == cost.length ? 0 : cost[n]);
+        }
+
+        return dp[N];
+    }
+
+    public int minCostClimbingStairs(int[] cost) {
+        int n = cost.length;
+        int[] dp = new int[n + 1];
+        return minCostClimbingStairs_memo(cost, n, dp);
+    }
+
+    // HW:-
+    // https://practice.geeksforgeeks.org/problems/friends-pairing-problem5425/1
+
+    public int friendsPairing_memo(int n, int[] dp) {
+        if (n <= 1) {
+            return dp[n] = 1;
+        }
+        if (dp[n] != 0)
+            return dp[n];
+        int single = friendsPairing_memo(n - 1, dp);
+        int pair = friendsPairing_memo(n - 2, dp) * (n - 1);
+        return dp[n] = single + pair;
+    }
+
+    public static int friendsPairing_tabu(int N, int[] dp) {
+        for (int n = 0; n <= N; n++) {
+            if (n <= 1) {
+                dp[n] = 1;
+                continue;
+            }
+            dp[n] = dp[n - 1] + dp[n - 2] * (n - 1);
+        }
+        return dp[N];
     }
 
     public static void main(String[] args) {
         // tribonacci();
         // climbStairs();
-        int[] cost = { 1, 100, 1, 1, 1, 100, 1, 1, 100, 1 };
-        System.out.println(minCostClimbingStairsRecursion(9, cost));
-
+        int n = 12;
+        int [] dp = new int[n+1];
+        System.out.println(friendsPairing_tabu(n, dp));
+        display(dp);
     }
 
 }
