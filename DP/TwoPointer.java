@@ -219,13 +219,71 @@ public class TwoPointer {
         return dp[N];
     }
 
+    // Maze Path Counts
+
+    public static int mazePath(int er, int ec, int[][] dir, int[][] dp) {
+
+        if (er == 0 && ec == 0)
+            return dp[er][ec] = 1;
+
+        if (dp[er][ec] != 0)
+            return dp[er][ec];
+
+        int count = 0;
+        for (int d = 0; d < dir.length; d++) {
+            int r = er + dir[d][0];
+            int c = ec + dir[d][1];
+
+            if (r >= 0 && c >= 0 && r < dp.length && c < dp[0].length)
+                count += mazePath(r, c, dir, dp);
+        }
+
+        return dp[er][ec] = count;
+    }
+
+    public static int mazePath_tabu(int ER, int EC, int[][] dp, int[][] dir) {
+        for (int er = 0; er <= ER; er++) {
+            for (int ec = 0; ec <= EC; ec++) {
+                if (er == 0 && ec == 0) {
+                    dp[er][ec] = 1;
+                    continue;
+                }
+
+                int count = 0;
+                for (int d = 0; d < dir.length; d++) {
+                    int r = er + dir[d][0];
+                    int c = ec + dir[d][1];
+                    if (r >= 0 && c >= 0 && r < dp.length && c < dp.length) {
+                        count += dp[r][c];
+                    }
+                }
+                dp[er][ec] = count;
+            }
+        }
+
+        return dp[ER][EC];
+    }
+
+    public static void mazePath() {
+        int[][] dir = { { 0, -1 }, { -1, 0 }, { -1, -1 } };
+        String[] dirS = { "h", "v", "d" };
+        int r = 3;
+        int c = 3;
+        int[][] dp = new int[r][c];
+        System.out.println(mazePath(2, 2, dir, dp));
+        display(dp);
+    }
+
+    // 62, 63
+
     public static void main(String[] args) {
         // tribonacci();
         // climbStairs();
         int n = 12;
-        int [] dp = new int[n+1];
-        System.out.println(friendsPairing_tabu(n, dp));
-        display(dp);
+        int[] dp = new int[n + 1];
+        // System.out.println(friendsPairing_tabu(n, dp));
+        mazePath();
+        // display(dp);
     }
 
 }
