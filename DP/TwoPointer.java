@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 // package DP;
 public class TwoPointer {
 
@@ -219,9 +221,26 @@ public class TwoPointer {
         return dp[N];
     }
 
+    public static int friendsPairing_opti(int N) {
+
+        int a = 0, b = 0;
+        for (int n = 0; n <= N; n++) {
+            if (n <= 1) {
+                b = a;
+                a = 1;
+                continue;
+            }
+            int ans = a + b * (n - 1);
+            b = a;
+            a = ans;
+        }
+
+        return a;
+    }
+
     // Maze Path Counts
 
-    public static int mazePath(int er, int ec, int[][] dir, int[][] dp) {
+    public static int mazePath_memo(int er, int ec, int[][] dir, int[][] dp) {
 
         if (er == 0 && ec == 0)
             return dp[er][ec] = 1;
@@ -235,7 +254,7 @@ public class TwoPointer {
             int c = ec + dir[d][1];
 
             if (r >= 0 && c >= 0 && r < dp.length && c < dp[0].length)
-                count += mazePath(r, c, dir, dp);
+                count += mazePath_memo(r, c, dir, dp);
         }
 
         return dp[er][ec] = count;
@@ -253,8 +272,56 @@ public class TwoPointer {
                 for (int d = 0; d < dir.length; d++) {
                     int r = er + dir[d][0];
                     int c = ec + dir[d][1];
-                    if (r >= 0 && c >= 0 && r < dp.length && c < dp.length) {
+                    if (r >= 0 && c >= 0 && r < dp.length && c < dp[0].length) {
                         count += dp[r][c];
+                    }
+                }
+                dp[er][ec] = count;
+            }
+        }
+
+        return dp[ER][EC];
+    }
+
+    public static int mazePathWithJumps_memo(int er, int ec, int[][] dir, int[][] dp) {
+        if (er == 0 && ec == 0) {
+            return dp[er][ec] = 1;
+        }
+        if (dp[er][ec] != 0) {
+            return dp[er][ec];
+        }
+
+        int count = 0;
+        for (int d = 0; d < dir.length; d++) {
+            int r = er + dir[d][0];
+            int c = ec + dir[d][1];
+
+            while (r >= 0 && c >= 0 && r < dp.length && c < dp[0].length) {
+                count += mazePathWithJumps_memo(r, c, dir, dp);
+                r += dir[d][0];
+                c += dir[d][1];
+            }
+        }
+        return dp[er][ec] = count;
+    }
+
+    public static int mazePathWithJumps_tabu(int ER, int EC, int[][] dir, int[][] dp) {
+        for (int er = 0; er <= ER; er++) {
+            for (int ec = 0; ec <= EC; ec++) {
+                if (er == 0 && ec == 0) {
+                    dp[er][ec] = 1;
+                    continue;
+                }
+
+                int count = 0;
+                for (int d = 0; d < dir.length; d++) {
+                    int r = er + dir[d][0];
+                    int c = ec + dir[d][1];
+
+                    while (r >= 0 && c >= 0 && r < dp.length && c < dp[0].length) {
+                        count += mazePathWithJumps_memo(r, c, dir, dp);
+                        r += dir[d][0];
+                        c += dir[d][1];
                     }
                 }
                 dp[er][ec] = count;
@@ -270,19 +337,192 @@ public class TwoPointer {
         int r = 3;
         int c = 3;
         int[][] dp = new int[r][c];
-        System.out.println(mazePath(2, 2, dir, dp));
+        System.out.println(mazePathWithJumps_memo(2, 2, dir, dp));
+        System.out.println(mazePathWithJumps_tabu(2, 2, dir, dp));
         display(dp);
     }
 
-    // 62, 63
+    // 62
+    public static int uniquePaths() {
+        int m = 3;
+        int n = 7;
+        int[][] dir = { { 0, -1 }, { -1, 0 } }; // left or up
+        int[][] dp = new int[m + 1][n + 1];
+        int count = uniquePaths_memo(m, n, dir, dp);
+        System.out.println(count);
+        display(dp);
+        return count;
+    }
+
+    public static int uniquePaths_memo(int er, int ec, int[][] dir, int[][] dp) {
+        if (er == 0 && ec == 0) {
+            return 1;
+        }
+
+        if (dp[er][ec] != 0)
+            return dp[er][ec];
+
+        int count = 0;
+        for (int d = 0; d < dir.length; d++) {
+            int r = er + dir[d][0];
+            int c = ec + dir[d][1];
+
+            if (r >= 0 && c >= 0 && r < dp.length && c < dp[0].length) {
+                count += uniquePaths_tabu(r, c, dir, dp);
+            }
+        }
+
+        return dp[er][ec] = count;
+    }
+
+    public static int uniquePaths_tabu(int ER, int EC, int[][] dir, int[][] dp) {
+
+        for (int er = 0; er <= ER; er++) {
+            for (int ec = 0; ec <= EC; ec++) {
+                if (er == 0 && ec == 0) {
+                    dp[er][ec] = 1;
+                    continue;
+                }
+
+                int count = 0;
+                for (int d = 0; d < dir.length; d++) {
+                    int r = er + dir[d][0];
+                    int c = ec + dir[d][1];
+
+                    if (r >= 0 && c >= 0 && r < dp.length && c < dp[0].length) {
+                        count += dp[r][c];
+                    }
+                }
+                dp[er][ec] = count;
+            }
+        }
+
+        return dp[ER][EC];
+    }
+
+    // TODO : complete this function and dry run
+    public static int uniquePaths_opti() {
+        return 0;
+    }
+
+    // 63
+    public static int uniquePathsWithObstacles(int[][] obstacleGrid) {
+
+        int m = obstacleGrid.length, n = obstacleGrid[0].length;
+        if (obstacleGrid[0][0] == 1 || obstacleGrid[m - 1][n - 1] == 1)
+            return 0;
+        int[][] dp = new int[m][n];
+        for (int[] d : dp) {
+            Arrays.fill(d, -1);
+        }
+        int[][] dir = { { 0, -1 }, { -1, 0 } };
+        System.out.println(uniquePathsWithObstacles_memo(m - 1, n - 1, obstacleGrid, dir, dp));
+    }
+
+    private static int uniquePathsWithObstacles_memo(int er, int ec, int[][] obstacleGrid, int[][] dir, int[][] dp) {
+        if (er == 0 && ec == 0)
+            return dp[er][ec] = 1;
+
+        if (dp[er][ec] != -1)
+            return dp[er][ec];
+
+        int count = 0;
+        for (int d = 0; d < dir.length; d++) {
+            int r = er + dir[d][0];
+            int c = ec + dir[d][1];
+
+            if (r >= 0 && c >= 0 && r < dp.length && c < dp[0].length && obstacleGrid[r][c] != 1) {
+                count += uniquePathsWithObstacles_memo(r, c, obstacleGrid, dir, dp);
+            }
+        }
+        return dp[er][ec] = count;
+    }
+
+    // 64
+    public int minPathSum(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int[][] dp = new int[m][n];
+        int[][] dir = { { -1, 0 }, { 0, -1 } }; // up or left;
+        return minPathSum_memo(m - 1, n - 1, dir, grid, dp);
+    }
+
+    public int minPathSum_memo(int er, int ec, int[][] dir, int[][] grid, int[][] dp) {
+        if (er == 0 && ec == 0) {
+            return dp[er][ec] = grid[er][ec];
+        }
+        if (dp[er][ec] != 0)
+            return dp[er][ec];
+
+        int min = (int) (1e9) + 8;
+        for (int d = 0; d < dir.length; d++) {
+            int r = er + dir[d][0];
+            int c = ec + dir[d][1];
+
+            if (r >= 0 && c >= 0 && r < dp.length && c < dp[0].length) {
+                min = Math.min(minPathSum_memo(r, c, dir, grid, dp), min);
+            }
+        }
+        return dp[er][ec] = min + grid[er][ec];
+    }
+
+    private int minPathSum_tabu(int[][] grid, int[][] dir, int[][] dp) {
+        int m = grid.length, n = grid[0].length;
+        int ER = m - 1, EC = n - 1;
+        for (int er = 0; er <= ER; er++) {
+            for (int ec = 0; ec <= EC; ec++) {
+                if (er == 0 && ec == 0) {
+                    dp[er][ec] = grid[er][ec];
+                    continue;
+                }
+
+                int min = (int) 1e9;
+                for (int d = 0; d < dir.length; d++) {
+                    int r = er + dir[d][0];
+                    int c = ec + dir[d][1];
+                    if (r >= 0 && c >= 0 && r < dp.length && c < dp[0].length) {
+                        min = Math.min(min, dp[r][c]);
+                    }
+                }
+                dp[er][ec] = min + grid[er][ec];
+            }
+        }
+        return dp[ER][EC];
+    }
+
+    // 396 -> Trick Question
+    public int maxRotateFunction(int[] nums) {
+        int n = nums.length;
+        int max = Integer.MIN_VALUE, prd = 0, sum = 0;
+        for(int i = 0; i < n; i++){
+            prd += i * nums[i];
+            sum += nums[i];
+        }
+
+        max = Math.max(prd, max);
+        for(int i = 0; i < n; i++){
+            prd = prd - sum + n * nums[i];
+            max = Math.max(prd, max);
+        }
+        
+        return max;
+    }
+
+    // https://www.geeksforgeeks.org/count-the-number-of-ways-to-divide-n-in-k-groups-incrementally/
+
+    // https://practice.geeksforgeeks.org/problems/gold-mine-problem2608/1
+    // public static int goldmine()
 
     public static void main(String[] args) {
         // tribonacci();
         // climbStairs();
-        int n = 12;
-        int[] dp = new int[n + 1];
+        // int n = 1;
+        // int[] dp = new int[n + 1];
         // System.out.println(friendsPairing_tabu(n, dp));
+        // System.out.println(friendsPairing_opti(n));
+        // display(dp);
         mazePath();
+        // uniquePaths();
         // display(dp);
     }
 
