@@ -237,6 +237,21 @@ public class TwoPointer {
         return a;
     }
 
+    public static int PrintfriendsPairing(String friends, String ans){
+        if(friends.length() == 0){
+            System.out.println(ans);
+            return 1;
+        }
+        char ch = friends.charAt(0);
+        int count = 0;
+        count += PrintfriendsPairing(friends.substring(1), ans + ch + " ");
+        for(int i = 1; i < friends.length(); i++){
+            String rstr = friends.substring(1, i) + friends.substring(i+1);
+            count += PrintfriendsPairing(rstr, ans + ch + friends.charAt(i) + " ");
+        }
+        return count;
+    }
+
     // Maze Path Counts
 
     public static int mazePath_memo(int er, int ec, int[][] dir, int[][] dp) {
@@ -360,6 +375,8 @@ public class TwoPointer {
         return dp[n] = count + (n > 0 && n <= 6 ? 1 : 0);
     }
 
+    // Time Complexity: 6 * n
+    // Space Complexity: O(n)
     public static int diceProblem_DP(int N, int[] dp) {
 
         for (int n = 0; n <= N; n++) {
@@ -465,6 +482,7 @@ public class TwoPointer {
         }
         int[][] dir = { { 0, -1 }, { -1, 0 } };
         System.out.println(uniquePathsWithObstacles_memo(m - 1, n - 1, obstacleGrid, dir, dp));
+        return 0;
     }
 
     private static int uniquePathsWithObstacles_memo(int er, int ec, int[][] obstacleGrid, int[][] dir, int[][] dp) {
@@ -568,10 +586,12 @@ public class TwoPointer {
         // int[] dp = new int[n + 1];
         // System.out.println(friendsPairing_tabu(n, dp));
         // System.out.println(friendsPairing_opti(n));
+        System.out.println(PrintfriendsPairing("ABCDEF", ""));
         // display(dp);
-        mazePath();
+        // mazePath();
         // uniquePaths();
         // display(dp);
     }
+
 
 }
