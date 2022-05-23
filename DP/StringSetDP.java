@@ -502,7 +502,7 @@ public class StringSetDP {
 
     public static int longestCommonSubstr(String s1, String s2, int n, int m){
         int [][] dp = new int[n+1][m+1];
-        int ans =  longestCommonSubString(s1, s2, n, m, dp);
+        int ans =  longestCommonSubString_tabu(s1, s2, n, m, dp);
         display2D(dp);
         return ans;
     }

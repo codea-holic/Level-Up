@@ -237,16 +237,16 @@ public class TwoPointer {
         return a;
     }
 
-    public static int PrintfriendsPairing(String friends, String ans){
-        if(friends.length() == 0){
+    public static int PrintfriendsPairing(String friends, String ans) {
+        if (friends.length() == 0) {
             System.out.println(ans);
             return 1;
         }
         char ch = friends.charAt(0);
         int count = 0;
         count += PrintfriendsPairing(friends.substring(1), ans + ch + " ");
-        for(int i = 1; i < friends.length(); i++){
-            String rstr = friends.substring(1, i) + friends.substring(i+1);
+        for (int i = 1; i < friends.length(); i++) {
+            String rstr = friends.substring(1, i) + friends.substring(i + 1);
             count += PrintfriendsPairing(rstr, ans + ch + friends.charAt(i) + " ");
         }
         return count;
@@ -577,7 +577,41 @@ public class TwoPointer {
     // https://www.geeksforgeeks.org/count-the-number-of-ways-to-divide-n-in-k-groups-incrementally/
 
     // https://practice.geeksforgeeks.org/problems/gold-mine-problem2608/1
-    // public static int goldmine()
+    public static int goldmine(int r, int c, int[][] gold, int[][] dp, int[][] dir) {
+
+        if (c == gold[0].length - 1) {
+            return dp[r][c] = gold[r][c];
+        }
+
+        if (dp[r][c] != 0)
+            return dp[r][c];
+
+        int maxGold = 0;
+        for (int d = 0; d < dir.length; d++) {
+            int x = r + dir[d][0];
+            int y = c + dir[d][1];
+            if (x >= 0 && y >= 0 && x < dp.length && y < dp[0].length) {
+                maxGold = Math.max(maxGold, goldmine(x, y, gold, dp, dir));
+            }
+        }
+        return dp[r][c] = maxGold + gold[r][c];
+    }
+
+    public static void goldmine() {
+
+        int[][] gold = { { 1, 3, 3 }, { 2, 1, 4 }, { 0, 6, 4 } };
+        int n = gold.length, m = gold[0].length;
+        int [][] dp = new int[n][m];
+        int[][] dir = { { -1, 1 }, { 0, 1 }, { 1, 1 } };
+        int maxGold = 0;
+        for(int r = 0; r < n; r++){
+            maxGold = Math.max(maxGold, goldmine(r, 0, gold, dp, dir));
+        }
+        System.out.println(maxGold);
+        display(dp);
+    }
+
+    
 
     public static void main(String[] args) {
         // tribonacci();
@@ -586,12 +620,12 @@ public class TwoPointer {
         // int[] dp = new int[n + 1];
         // System.out.println(friendsPairing_tabu(n, dp));
         // System.out.println(friendsPairing_opti(n));
-        System.out.println(PrintfriendsPairing("ABCDEF", ""));
+        // System.out.println(PrintfriendsPairing("ABCDEF", ""));
+        goldmine();
         // display(dp);
         // mazePath();
         // uniquePaths();
         // display(dp);
     }
-
 
 }
