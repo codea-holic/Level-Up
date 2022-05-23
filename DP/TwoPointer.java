@@ -161,7 +161,6 @@ public class TwoPointer {
     }
 
     // 746.
-
     public int minCostClimbingStairs_memo(int[] cost, int n, int[] dp) {
         if (n <= 1) {
             return dp[n] = cost[n];
@@ -342,6 +341,55 @@ public class TwoPointer {
         display(dp);
     }
 
+    // DiceProblem_DP
+    public static int diceProblem_memo(int n, int[] dp) {
+        if (n <= 1) {
+            return dp[n] = n;
+        }
+
+        if (dp[n] != -1)
+            return dp[n];
+
+        int count = 0;
+        for (int d = 1; d <= 6; d++) {
+            if (n - d > 0) {
+                count += diceProblem_memo(n - d, dp);
+            }
+        }
+
+        return dp[n] = count + (n > 0 && n <= 6 ? 1 : 0);
+    }
+
+    public static int diceProblem_DP(int N, int[] dp) {
+
+        for (int n = 0; n <= N; n++) {
+            if (n <= 1) {
+                dp[n] = n;
+                continue;
+            }
+
+            int count = 0;
+            for (int d = 1; d <= 6; d++) {
+                if (n - d > 0) {
+                    count += diceProblem_memo(n - d, dp);
+                }
+            }
+
+            dp[n] = count + (n > 0 && n <= 6 ? 1 : 0);
+        }
+
+        return dp[N];
+    }
+
+    public static void diceProblem() {
+        int n = 10;
+        int[] dp = new int[n + 1];
+        Arrays.fill(dp, -1);
+        System.out.println(diceProblem_memo(n, dp));
+        System.out.println(diceProblem_DP(n, dp));
+        display(dp);
+    }
+
     // 62
     public static int uniquePaths() {
         int m = 3;
@@ -494,17 +542,17 @@ public class TwoPointer {
     public int maxRotateFunction(int[] nums) {
         int n = nums.length;
         int max = Integer.MIN_VALUE, prd = 0, sum = 0;
-        for(int i = 0; i < n; i++){
+        for (int i = 0; i < n; i++) {
             prd += i * nums[i];
             sum += nums[i];
         }
 
         max = Math.max(prd, max);
-        for(int i = 0; i < n; i++){
+        for (int i = 0; i < n; i++) {
             prd = prd - sum + n * nums[i];
             max = Math.max(prd, max);
         }
-        
+
         return max;
     }
 
