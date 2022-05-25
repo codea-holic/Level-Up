@@ -1,6 +1,7 @@
+// package DP;
+
 import java.util.Arrays;
 
-// package DP;
 public class TwoPointer {
 
     public static void display(int[] dp) {
@@ -252,8 +253,15 @@ public class TwoPointer {
         return count;
     }
 
-    // Maze Path Counts
+    public static void friendsPairing() {
+        int n = 1;
+        int[] dp = new int[n + 1];
+        System.out.println(friendsPairing_tabu(n, dp));
+        System.out.println(friendsPairing_opti(n));
+        System.out.println(PrintfriendsPairing("ABCDEF", ""));
+    }
 
+    // Maze Path Counts
     public static int mazePath_memo(int er, int ec, int[][] dir, int[][] dp) {
 
         if (er == 0 && ec == 0)
@@ -601,14 +609,149 @@ public class TwoPointer {
 
         int[][] gold = { { 1, 3, 3 }, { 2, 1, 4 }, { 0, 6, 4 } };
         int n = gold.length, m = gold[0].length;
-        int [][] dp = new int[n][m];
+        int[][] dp = new int[n][m];
         int[][] dir = { { -1, 1 }, { 0, 1 }, { 1, 1 } };
         int maxGold = 0;
-        for(int r = 0; r < n; r++){
+        for (int r = 0; r < n; r++) {
             maxGold = Math.max(maxGold, goldmine(r, 0, gold, dp, dir));
         }
         System.out.println(maxGold);
         display(dp);
+    }
+
+    // 91. Decode Ways
+    static public int numDecodings(String s) {
+        // System.out.println(decodeWays_recr(s, ""));
+        int n = s.length();
+        long[] dp = new long[6 + 1];
+        Arrays.fill(dp, 0);
+        // System.out.println(decodeWays_DP(s, n, dp));
+        System.out.print(decodeWaysExtended("*1*1*0", 0, dp));
+        // display(dp);
+        return 0;
+    }
+
+    public static int decodeWays_recr(String s, String ans) {
+        if (s.length() == 0) {
+            System.out.println(ans);
+            return 1;
+        }
+
+        int count = 0;
+        char ch = s.charAt(0);
+        if (ch == '0')
+            return 0;
+
+        count += decodeWays_recr(s.substring(1), ans + ch + " ");
+
+        if (s.length() >= 2) {
+            String ch12 = s.substring(0, 2);
+            int val12 = Integer.parseInt(ch12, 10);
+            if (val12 < 10 || val12 > 26)
+                return val12 < 10 ? 0 : count;
+            count += decodeWays_recr(s.substring(2), ans + ch12 + " ");
+        }
+        return count;
+    }
+
+    public static int decodeWays_memo(String s, int n, int[] dp) {
+        if (n == s.length()) {
+            return dp[n] = 1;
+        }
+
+        if (dp[n] != -1)
+            return dp[n];
+
+        int count = 0;
+        char ch = s.charAt(n);
+        if (ch == '0')
+            return 0;
+        count += decodeWays_memo(s, n + 1, dp);
+
+        if (n < s.length() - 1) {
+            char ch1 = s.charAt(n);
+            char ch2 = s.charAt(n + 1);
+            int val12 = (ch2 - '0') + 10 * (int) (ch1 - '0');
+            if (val12 <= 26) {
+                count += decodeWays_memo(s, n + 2, dp);
+            }
+        }
+
+        return dp[n] = count;
+    }
+
+    public static int decodeWays_DP(String s, int N, int[] dp) {
+        for (int n = N; n >= 0; n--) {
+            if (n == s.length()) {
+                dp[n] = 1;
+                continue;
+            }
+
+            int count = 0;
+            char ch = s.charAt(n);
+            if (ch == '0') {
+                continue;
+            }
+
+            count += dp[n + 1];
+            if (n < s.length() - 1) {
+                char ch1 = s.charAt(n);
+                char ch2 = s.charAt(n + 1);
+                int val12 = (ch2 - '0') + 10 * (int) (ch1 - '0');
+                if (val12 <= 26) {
+                    count += dp[n + 2];
+                }
+            }
+            dp[n] = count;
+        }
+        return dp[0];
+    }
+
+    // 639 // Decode ways with asterik(*) String
+    private static int mod = (int) (1e9) + 7;
+
+    public static long decodeWaysExtended(String s, int idx, long[] dp) {
+        if (idx == s.length()) {
+            return dp[idx] = 1;
+        }
+
+        if (dp[idx] != 0)
+            return dp[idx];
+
+        long count = 0;
+        char ch1 = s.charAt(idx);
+
+        if (ch1 == '0')
+            return 0;
+        if (ch1 == '*') {
+            count = ((count % mod) + 9 * (decodeWaysExtended(s, idx + 1, dp) % mod)) % mod; // correct
+            if (idx < s.length() - 1) {
+                char ch2 = s.charAt(idx + 1);
+                if (ch2 == '*') {
+                    count = ((count % mod) + 15 * (decodeWaysExtended(s, idx + 2, dp) % mod)) % mod; // correct
+                } else if (ch2 >= '0' && ch2 <= '6') {
+                    count = ((count % mod) + 2 * (decodeWaysExtended(s, idx + 2, dp) % mod)) % mod; // correct
+                } else if (ch2 > '6') {
+                    count = ((count % mod) + (decodeWaysExtended(s, idx + 2, dp) % mod)) % mod; // correct
+                }
+            }
+        } else {
+            count = ((count % mod) + (decodeWaysExtended(s, idx + 1, dp) % mod)) % mod;
+            if (idx < s.length() - 1) {
+                char ch2 = s.charAt(idx + 1);
+                if (ch2 != '*') {
+                    int val12 = (int) (ch1 - '0') * 10 + (int) (ch2 - '0');
+                    if (val12 <= 26)
+                        count = ((count % mod) + (decodeWaysExtended(s, idx + 2, dp) % mod)) % mod;
+                } else {
+                    if (ch1 == '1')
+                        count = ((count % mod) + 9 * (decodeWaysExtended(s, idx + 2, dp) % mod)) % mod;
+                    else if (ch1 == '2')
+                        count = ((count % mod) + 6 * (decodeWaysExtended(s, idx + 2, dp) % mod)) % mod;
+                }
+            }
+        }
+        return dp[idx] = count;
     }
 
     
@@ -616,16 +759,10 @@ public class TwoPointer {
     public static void main(String[] args) {
         // tribonacci();
         // climbStairs();
-        // int n = 1;
-        // int[] dp = new int[n + 1];
-        // System.out.println(friendsPairing_tabu(n, dp));
-        // System.out.println(friendsPairing_opti(n));
-        // System.out.println(PrintfriendsPairing("ABCDEF", ""));
-        goldmine();
+        // goldmine();
         // display(dp);
         // mazePath();
         // uniquePaths();
-        // display(dp);
+        numDecodings("226");
     }
-
 }
