@@ -754,7 +754,54 @@ public class TwoPointer {
         return dp[idx] = count;
     }
 
-    
+    // https://www.geeksforgeeks.org/count-number-of-ways-to-partition-a-set-into-k-subsets/
+    public static int partitionIntoK_memo(int n, int k, int[][] dp) {
+        if (n == k || k == 1) {
+            return dp[n][k] = 1;
+        }
+
+        if (dp[n][k] != -1)
+            return dp[n][k];
+
+        int count = 0;
+        int single = partitionIntoK_memo(n - 1, k - 1, dp);
+        int withSomeTeam = partitionIntoK_memo(n - 1, k, dp);
+        count = single + k * withSomeTeam;
+        return dp[n][k] = count;
+    }
+
+    public static int partitionIntoK_DP(int N, int K, int[][] dp) {
+
+        for(int n = 1; n <= N; n++){
+            for(int k = 1; k <= K; k++){
+                if (n == k || k == 1) {
+                    dp[n][k] = 1;
+                    continue;
+                }
+        
+                int count = 0;
+                int single = dp[n-1][k-1]; // partitionIntoK_memo(n - 1, k - 1, dp);
+                int withSomeTeam = dp[n-1][k]; // partitionIntoK_memo(n - 1, k, dp);
+                count = single + k * withSomeTeam;
+                dp[n][k] = count;
+            }
+        }
+        return dp[N][K];
+    }
+
+    public static int partitionIntoK_opti(int N, int K){
+        return 0;
+    }
+
+    public static void partition(){
+        int n = 4, k = 2;
+        if(n < k) return;
+        int [][] dp = new int[n+1][k+1];
+        
+        for(int [] d : dp) Arrays.fill(d, -1);
+        System.out.println(partitionIntoK_DP(n, k, dp));
+        // display(dp);
+    }
 
     public static void main(String[] args) {
         // tribonacci();
@@ -763,6 +810,7 @@ public class TwoPointer {
         // display(dp);
         // mazePath();
         // uniquePaths();
-        numDecodings("226");
+        // numDecodings("226");
+        partition();
     }
 }
