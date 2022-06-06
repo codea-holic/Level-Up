@@ -30,7 +30,7 @@ public class Lec_004_Queens {
         return count;
     }
 
-    // Sub : subsequence Method
+    // Sub : subsequence Method, qpsf : queen placed so far
     public static int queenCombination1D_Sub(boolean[] boxes, int tnq, int bno, int qpsf, String psf) {
         if (tnq == qpsf) {
             System.out.println(psf);
@@ -187,7 +187,8 @@ public class Lec_004_Queens {
      * Not Optimized:
      * We not need to check for each and every box because, We can say that every
      * row contains only one queen So, as soon as we placed any queen we change the
-     * row, then it will be Optimized.
+     * row, then it will be little Optimized. However, there are so many optimization
+     * we can do in nQueen problem.
      * @tnq : total no. of Queens
      * @qpsf : queen placed so far
      * @psf : path so far
@@ -232,7 +233,7 @@ public class Lec_004_Queens {
     }
 
     // Time complexity: (n)^q;
-    public static int nQueensOptimal(boolean[][] boxes, int rowNo, int tnq, String psf) {
+    public static int nQueenAlternative(boolean[][] boxes, int rowNo, int tnq, String psf) {
         if(rowNo >= boxes.length || tnq == 0){
             if(tnq == 0){
                 System.out.println(psf);
@@ -242,12 +243,12 @@ public class Lec_004_Queens {
         }
         int count = 0;
         for(int i = rowNo, j = 0; j < boxes[0].length; j++){
-            if(isQueenSafe(boxes, i, j)){
+            if(isQueenSafeVector(boxes, i, j)){
                 boxes[i][j] = true;
-                count += nQueensOptimal(boxes, rowNo + 1, tnq - 1, psf + "(" + i + "," + j + ")" + " ");
+                count += nQueenAlternative(boxes, rowNo + 1, tnq - 1, psf + "(" + i + "," + j + ")" + " ");
                 boxes[i][j] = false;
             }
-            count += nQueensOptimal(boxes, rowNo + 1, tnq, psf);
+            count += nQueenAlternative(boxes, rowNo + 1, tnq, psf);
         }
         return count;
     }
@@ -332,13 +333,13 @@ public class Lec_004_Queens {
         // System.out.println(queensPermutation2D(boxes, 3, 0, ""));
         // System.out.println(queensPermutation2D_Sub(boxes, 0, 3, 0, ""));
         // System.out.println(nQueens(boxes, 0, 4, 0, ""));
-        System.out.println(nQueensOptimal(boxes, 0, 4, ""));
+        // System.out.println(nQueenAlternative(boxes, 0, 4, ""));
         System.out.println(nQueensPermutation(boxes, 4, ""));
         int n = 4, tnq = 4;
         // rows = new boolean[n];
         // cols = new boolean[n];
         // diags = new boolean[n + n - 1];
         // adiags = new boolean[n + n - 1];
-        System.out.println(nqueen_01_BranchAndBound(n, tnq, 0, ""));
+        // System.out.println(nqueen_01_BranchAndBound(n, tnq, 0, ""));
     }
 }

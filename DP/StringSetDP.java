@@ -507,6 +507,7 @@ public class StringSetDP {
     }
 
     // https://practice.geeksforgeeks.org/problems/count-subsequences-of-type-ai-bj-ck4425/
+    // Done
 
     // https://practice.geeksforgeeks.org/problems/longest-common-substring1452/
     private static int longestCommonSubString_tabu(String s1, String s2, int N, int M, int[][] dp) {
@@ -520,14 +521,14 @@ public class StringSetDP {
 
                 if (s1.charAt(n - 1) == s2.charAt(m - 1)) {
                     dp[n][m] = dp[n - 1][m - 1] + 1;
-                    if(dp[n][m] > max){
+                    if (dp[n][m] > max) {
                         max = dp[n][m];
                         ei = n - 1;
                     }
                 }
             }
         }
-        System.out.println(s1.substring(ei - max  + 1, ei + 1));
+        System.out.println(s1.substring(ei - max + 1, ei + 1));
         return max;
     }
 
@@ -626,56 +627,174 @@ public class StringSetDP {
     // 1458. Max Dot Product of Subsequence
     public int maxDotProduct(int[] nums1, int[] nums2) {
         int n = nums1.length, m = nums2.length;
-        int [][] dp = new int[n+1][m+1];
+        int[][] dp = new int[n + 1][m + 1];
         int max = maxDotProduct_memo(nums1, nums2, n, m, dp);
         return max;
     }
 
-    private int maximum(int... arr){
+    private int maximum(int... arr) {
         int val = arr[0];
-        for(int ele : arr) val = Math.max(val, ele);
+        for (int ele : arr)
+            val = Math.max(val, ele);
         return val;
     }
-    
-    public int maxDotProduct_memo(int [] nums1, int [] nums2, int n, int m, int [][] dp){
 
-        if(n == 0 || m == 0){
-            return dp[n][m] = -(int)1e8;
+    public int maxDotProduct_memo(int[] nums1, int[] nums2, int n, int m, int[][] dp) {
+
+        if (n == 0 || m == 0) {
+            return dp[n][m] = -(int) 1e8;
         }
 
-        if(dp[n][m] != -(int)1e9) return dp[n][m];
+        if (dp[n][m] != -(int) 1e9)
+            return dp[n][m];
 
-        int val = nums1[n-1] * nums2[m-1];
-        int acceptBoth = maxDotProduct_memo(nums1, nums2, n-1, m-1, dp) + val;
-        int a = maxDotProduct_memo(nums1, nums2, n-1, m, dp);
-        int b = maxDotProduct_memo(nums1, nums2, n, m-1, dp);
+        int val = nums1[n - 1] * nums2[m - 1];
+        int acceptBoth = maxDotProduct_memo(nums1, nums2, n - 1, m - 1, dp) + val;
+        int a = maxDotProduct_memo(nums1, nums2, n - 1, m, dp);
+        int b = maxDotProduct_memo(nums1, nums2, n, m - 1, dp);
 
         return dp[n][m] = maximum(val, acceptBoth, a, b);
     }
-    
-    public int maxDotProduct_DP(int [] nums1, int [] nums2, int N, int M, int [][] dp){
 
-        for(int n = 0; n <= N; n++){
-            for(int m = 0; m <= M; m++){
-                if(n == 0 || m == 0){
-                    dp[n][m] = -(int)1e8;
+    public int maxDotProduct_DP(int[] nums1, int[] nums2, int N, int M, int[][] dp) {
+
+        for (int n = 0; n <= N; n++) {
+            for (int m = 0; m <= M; m++) {
+                if (n == 0 || m == 0) {
+                    dp[n][m] = -(int) 1e8;
                     continue;
                 }
-        
-                int val = nums1[n-1] * nums2[m-1];
-                int acceptBoth = maxDotProduct_memo(nums1, nums2, n-1, m-1, dp) + val;
-                int a = maxDotProduct_memo(nums1, nums2, n-1, m, dp);
-                int b = maxDotProduct_memo(nums1, nums2, n, m-1, dp);
-        
+
+                int val = nums1[n - 1] * nums2[m - 1];
+                int acceptBoth = maxDotProduct_memo(nums1, nums2, n - 1, m - 1, dp) + val;
+                int a = maxDotProduct_memo(nums1, nums2, n - 1, m, dp);
+                int b = maxDotProduct_memo(nums1, nums2, n, m - 1, dp);
+
                 dp[n][m] = maximum(val, acceptBoth, a, b);
             }
         }
 
         return dp[N][M];
     }
-    
+
     // ============================================================================================
-    // 
+    // 132.
+    public int minCut(String s) {
+        int n = s.length();
+        boolean[][] isPalindrome = new boolean[n][n];
+
+        for (int gap = 0; gap < n; gap++) {
+            for (int i = 0, j = gap; j < n; i++, j++) {
+                if (gap == 0) {
+                    isPalindrome[i][j] = true;
+                } else if (gap == 1 && s.charAt(i) == s.charAt(j)) {
+                    isPalindrome[i][j] = true;
+                } else {
+                    if (s.charAt(i) == s.charAt(j)) {
+                        isPalindrome[i][j] = isPalindrome[i + 1][j - 1];
+                    } else {
+                        isPalindrome[i][j] = false;
+                    }
+                }
+            }
+        }
+
+        int[] dp = new int[n];
+        Arrays.fill(dp, -1);
+        return minCut(s, 0, n - 1, dp, isPalindrome);
+    }
+
+    public int minCut(String s, int si, int ei, int[] dp, boolean[][] pdp) {
+
+        if (pdp[si][ei])
+            return 0;
+
+        if (dp[si] != -1)
+            return dp[si];
+
+        int minAns = (int) 1e9;
+        for (int cut = si; cut <= ei; cut++) {
+            if (pdp[si][cut]) {
+                minAns = Math.min(minAns, minCut(s, cut + 1, ei, dp, pdp) + 1);
+            }
+        }
+
+        return dp[si] = minAns;
+    }
+
+    public static int palindromicString_DP(String s, int n, boolean[][] dp) {
+        int count = 0;
+        for (int gap = 0; gap < n; gap++) {
+            for (int i = 0, j = gap; j < n; i++, j++) {
+                if (gap == 0) {
+                    dp[i][j] = true;
+                } else if (gap == 1 && s.charAt(i) == s.charAt(j)) {
+                    dp[i][j] = true;
+                    count++;
+                } else {
+                    if (s.charAt(i) == s.charAt(j)) {
+                        dp[i][j] = dp[i + 1][j - 1] || (i + 1) == (j - 1);
+                        count = dp[i][j] ? count + 1 : count;
+                    } else {
+                        dp[i][j] = false;
+                    }
+                }
+            }
+        }
+        return count;
+    }
+
+    // ============================================================================================
+    // 139.
+    public boolean wordBreak(String s, List<String> wordDict) {
+
+        HashSet<String> set = new HashSet<>();
+        int maxLen = 0;
+        for (String word : wordDict) {
+            set.add(word);
+            maxLen = Math.max(maxLen, word.length());
+        }
+        int n = s.length();
+        boolean[] dp = new boolean[n + 1];
+        return wordBreak(s, n, set, maxLen, dp);
+
+    }
+
+    public boolean wordBreak(String s, int n, HashSet<String> set, int len, boolean[] dp) {
+
+        dp[0] = true;
+        for (int i = 1; i <= n; i++) {
+            if (!dp[0])
+                continue;
+            for (int l = 1; l <= len && i + l <= n; l++) {
+                String substr = s.substring(i, i + l);
+                if (set.contains(substr)) {
+                    dp[i + 1] = true;
+                }
+            }
+        }
+
+        return dp[n];
+    }
+
+    // Reverse-Engineering
+    // Find the particular word which is Longest Palindromic Subsequence
+    public static String LPS_backEng(String str, int si, int ei, int[][] dp) {
+        if (si >= ei) {
+            return si == ei ? str.charAt(si) + "" : "";
+        }
+
+        if (str.charAt(si) == str.charAt(ei)) {
+            return str.charAt(si) + LPS_backEng(str, si + 1, ei - 1, dp) + str.charAt(si);
+        } else if (dp[si + 1][ei] > dp[si][ei - 1]) {
+            return LPS_backEng(str, si + 1, ei, dp);
+        } else {
+            return LPS_backEng(str, si, ei - 1, dp);
+        }
+    }
+
+   
+
     public static void main(String[] args) {
         // longestPlaindromicSubsequence();
         // longestCommonSubsequence();
@@ -689,7 +808,17 @@ public class StringSetDP {
         // longestCommonSubstr("abc", "ac", 3, 2);
         // System.out.println(removeStars("*b?*c*d***a*****"));
         // System.out.println(longestCommonSubstr("ABCDGH", "ACDGHR", 6, 6));
-        System.out.println(longestCommonSubstr("ABCDGH", "ACDGHR", 6, 6));
+        // System.out.println(longestCommonSubstr("ABCDGH", "ACDGHR", 6, 6));
         // System.out.println(isMatch("", ""));
+        boolean[][] dp = new boolean[7][7];
+        System.out.println(palindromicString_DP("geekeke", 7, dp));
+
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 7; j++) {
+                System.out.print(dp[i][j] ? "T " : "F ");
+            }
+            System.out.println();
+        }
+
     }
 }

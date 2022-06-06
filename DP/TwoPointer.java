@@ -607,16 +607,44 @@ public class TwoPointer {
 
     public static void goldmine() {
 
-        int[][] gold = { { 1, 3, 3 }, { 2, 1, 4 }, { 0, 6, 4 } };
+        // int[][] gold = { { 1, 3, 3 }, { 2, 1, 4 }, { 0, 6, 4 } };
+        int[][] gold = { { 1, 3, 1, 5 }, { 2, 2, 4, 1 }, { 5, 0, 2, 3 }, { 0, 6, 1, 2 } };
         int n = gold.length, m = gold[0].length;
         int[][] dp = new int[n][m];
         int[][] dir = { { -1, 1 }, { 0, 1 }, { 1, 1 } };
-        int maxGold = 0;
+        int maxGold = 0, si = 0;
         for (int r = 0; r < n; r++) {
-            maxGold = Math.max(maxGold, goldmine(r, 0, gold, dp, dir));
+            // maxGold = Math.max(maxGold, goldmine(r, 0, gold, dp, dir));
+            int ans = goldmine(r, 0, gold, dp, dir);
+            if (maxGold < ans) {
+                maxGold = ans;
+                si = r;
+            }
         }
+
         System.out.println(maxGold);
-        display(dp);
+        System.out.println(goldMine_BackEng(dp, dir, si, 0));
+    }
+
+    public static String goldMine_BackEng(int[][] dp, int[][] dir, int sr, int sc) {
+
+        if (sc == dp[0].length - 1) {
+            return "(" + sr + "," + sc + ") ";
+        }
+
+        int max = 0, i = 0, j = 0;
+        for (int d = 0; d < dir.length; d++) {
+            int r = sr + dir[d][0];
+            int c = sc + dir[d][1];
+            if (r >= 0 && c >= 0 && r < dp.length && c < dp[0].length) {
+                if (max < dp[r][c]) {
+                    max = dp[r][c];
+                    i = r;
+                    j = c;
+                }
+            }
+        }
+        return "(" + sr + "," + sc + ") " + goldMine_BackEng(dp, dir, i, j);
     }
 
     // 91. Decode Ways
@@ -772,16 +800,16 @@ public class TwoPointer {
 
     public static int partitionIntoK_DP(int N, int K, int[][] dp) {
 
-        for(int n = 1; n <= N; n++){
-            for(int k = 1; k <= K; k++){
+        for (int n = 1; n <= N; n++) {
+            for (int k = 1; k <= K; k++) {
                 if (n == k || k == 1) {
                     dp[n][k] = 1;
                     continue;
                 }
-        
+
                 int count = 0;
-                int single = dp[n-1][k-1]; // partitionIntoK_memo(n - 1, k - 1, dp);
-                int withSomeTeam = dp[n-1][k]; // partitionIntoK_memo(n - 1, k, dp);
+                int single = dp[n - 1][k - 1]; // partitionIntoK_memo(n - 1, k - 1, dp);
+                int withSomeTeam = dp[n - 1][k]; // partitionIntoK_memo(n - 1, k, dp);
                 count = single + k * withSomeTeam;
                 dp[n][k] = count;
             }
@@ -789,16 +817,18 @@ public class TwoPointer {
         return dp[N][K];
     }
 
-    public static int partitionIntoK_opti(int N, int K){
+    public static int partitionIntoK_opti(int N, int K) {
         return 0;
     }
 
-    public static void partition(){
+    public static void partition() {
         int n = 4, k = 2;
-        if(n < k) return;
-        int [][] dp = new int[n+1][k+1];
-        
-        for(int [] d : dp) Arrays.fill(d, -1);
+        if (n < k)
+            return;
+        int[][] dp = new int[n + 1][k + 1];
+
+        for (int[] d : dp)
+            Arrays.fill(d, -1);
         System.out.println(partitionIntoK_DP(n, k, dp));
         // display(dp);
     }
@@ -806,11 +836,11 @@ public class TwoPointer {
     public static void main(String[] args) {
         // tribonacci();
         // climbStairs();
-        // goldmine();
+        goldmine();
         // display(dp);
         // mazePath();
         // uniquePaths();
         // numDecodings("226");
-        partition();
+        // partition();
     }
 }
