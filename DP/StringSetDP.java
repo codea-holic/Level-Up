@@ -757,7 +757,6 @@ public class StringSetDP {
         int n = s.length();
         boolean[] dp = new boolean[n + 1];
         return wordBreak(s, n, set, maxLen, dp);
-
     }
 
     public boolean wordBreak(String s, int n, HashSet<String> set, int len, boolean[] dp) {
@@ -773,10 +772,12 @@ public class StringSetDP {
                 }
             }
         }
-
         return dp[n];
     }
 
+    public static void wordBreakII(){
+        // DO IT
+    }
     // Reverse-Engineering
     // Find the particular word which is Longest Palindromic Subsequence
     public static String LPS_backEng(String str, int si, int ei, int[][] dp) {
@@ -793,7 +794,6 @@ public class StringSetDP {
         }
     }
 
-   
 
     public static void main(String[] args) {
         // longestPlaindromicSubsequence();

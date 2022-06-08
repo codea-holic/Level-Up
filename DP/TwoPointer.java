@@ -833,6 +833,38 @@ public class TwoPointer {
         // display(dp);
     }
 
+    // https://practice.geeksforgeeks.org/problems/path-in-matrix3805/
+    static int maximumPath(int N, int gold[][])
+    {
+        // code here
+        int [][] dir = {{1, -1}, {1, 0}, {1, 1}};
+        int max = 0;
+        int [][] dp = new int[N][N];
+        for(int c = 0; c < gold[0].length; c++){
+            max = Math.max(max, maxPath(gold, dp, dir, 0, c));
+        }
+        return max;
+    }
+    
+    public static int maxPath(int [][] gold, int [][] dp, int [][] dir, int r, int c){
+        
+        if(r == dp.length - 1){
+            return dp[r][c] = gold[r][c];
+        }
+        
+        if(dp[r][c] != 0) return dp[r][c];
+        
+        int max = 0;
+        for(int d = 0; d < dir.length; d++){
+            int x = r + dir[d][0];
+            int y = c + dir[d][1];
+            if(x >= 0 && y >= 0 && x < dp.length && y < dp[0].length){
+                max = Math.max(max, maxPath(gold, dp, dir, x, y));
+            }
+        }
+        
+        return dp[r][c] = max + gold[r][c];
+    }
     public static void main(String[] args) {
         // tribonacci();
         // climbStairs();

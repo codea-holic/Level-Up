@@ -1,3 +1,4 @@
+
 // package DP;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,9 +38,12 @@ public class LIS_003 {
         // int [] arr = {5, 6, 4, 3, 7, 2, 4};
         int n = arr.length, maxLen = 0;
         int[] dp = new int[n];
-
-        LDS_DP(arr, dp);
+        for (int i = 0; i < n; i++) {
+            maxLen = Math.max(LIS_Rec(arr, i, dp), maxLen);
+        }
+        // LDS_DP(arr, dp);
         display(dp);
+        System.out.println(maxLen);
     }
 
     public static int LIS_DP(int[] arr, int[] dp) {
@@ -286,7 +290,10 @@ public class LIS_003 {
     public int minDeletion(int[] nums) {
         int n = nums.length;
         int[] dp = new int[n];
-        return n - LIS_DP(nums, dp);
+        // This is wrong, we also have to check for equal element (Means we have to find
+        // longest non-decreasing subsequence)
+        // return n - (nums, dp);
+        return 0;
     }
 
     // ==================================================================================================
@@ -312,7 +319,7 @@ public class LIS_003 {
         return maxBridges;
     }
 
-    public static int buildingBridges_opti(int [][] arr){
+    public static int buildingBridges_opti(int[][] arr) {
         return 0;
     }
 
@@ -321,8 +328,9 @@ public class LIS_003 {
         List<Integer> list = new ArrayList<>();
         for (int i = 0; i < n; i++) {
             int locOfNum = binarySearch(list, arr[i]);
-            if(locOfNum == list.size()) list.add(arr[i]);
-            else{
+            if (locOfNum == list.size())
+                list.add(arr[i]);
+            else {
                 list.set(locOfNum, arr[i]);
             }
         }
@@ -343,14 +351,14 @@ public class LIS_003 {
     }
 
     public static void main(String[] args) {
-        // LIS_Rec();
+        LIS_Rec();
         int[] arr = { 0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15, 14 };
         // int [][] bridges = {{8, 1}, {1, 2}, {4, 3}, {3, 4}, {5, 5}, {2, 6}, {6, 7},
         // {7, 8}};
         int[][] bridges2 = { { 6, 2 }, { 4, 3 }, { 2, 6 }, { 1, 5 } };
         // System.out.println(reverse_longestBitonicSequence(arr));
         // System.out.println(buildingBridges(bridges2));
-        int ans = LIS_optimized(arr);
-        System.out.println(ans);
+        // int ans = LIS_optimized(arr);
+        // System.out.println(ans);
     }
 }
