@@ -1,5 +1,6 @@
-package DP;
+// package DP;
 
+// Consider video 008, Because some part is missing
 import java.util.Arrays;
 
 public class TargetSet {
@@ -138,7 +139,6 @@ public class TargetSet {
     }
 
     public static int targetSumDP(int[] arr, int N, int Tar, int[][] dp) {
-
         for (int n = 0; n <= N; n++) {
             for (int tar = 0; tar <= Tar; tar++) {
                 if (n == 0 || tar == 0) {
@@ -158,18 +158,32 @@ public class TargetSet {
         return dp[N][Tar];
     }
 
-    public static void targetSum_BackEng(int [] arr, int N, int Tar, int [][] dp){
-
+    public static int targetSum_BackEng(int [] arr, int N, int Tar, int [][] dp, String psf){
+        if(N == 0 || Tar == 0){
+            if(Tar == 0){
+                System.out.println(psf);
+                return 1;
+            }
+            return 0;
+        }
+        int count = 0;
+        if(Tar - arr[N-1] >= 0 && dp[N-1][Tar - arr[N-1]] == 1){
+            count += targetSum_BackEng(arr, N-1, Tar - arr[N-1], dp, psf + arr[N-1] + " ");
+        }
+        if(dp[N-1][Tar] == 1){
+            count += targetSum_BackEng(arr, N-1, Tar, dp, psf);
+        }
+        return count;
     }
-    
+
     public static int targetSum() {
-        int[] arr = { 2, 3, 5, 7 };
+        int[] arr = { 2, 3, 5, 7};
         int tar = 10, n = arr.length;
         int[][] dp = new int[n + 1][tar + 1];
         // fill(dp, -1);
         // int ans = targetSum(arr, n, tar, dp);
         int ans = targetSumDP(arr, n, tar, dp);
-        display(dp);
+        System.out.println(targetSum_BackEng(arr, n, tar, dp, ""));
         return ans;
     }
 
