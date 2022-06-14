@@ -26,13 +26,13 @@ public class QuickSort {
 
         if(si > ei) return;
 
-        int pivot = ei;
+        int pivot = ei; // last Index
+        // int pivot = si; // first Index
+        // int pivot = (si + ei) / 2; // for mid Index
         int pIdx = segregateData(arr, si, ei, pivot);
-
         quickSort(arr, si, pIdx - 1);
         quickSort(arr, pIdx + 1, ei);
     }
-
     public static void main(String[] args) {
         int [] arr = {-12, 2, 7, 4, 34, 23, 0, 1, -1, -50, 16, 23, 7, 4, 2, 3};
         quickSort(arr, 0, arr.length - 1);
