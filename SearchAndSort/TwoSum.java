@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -157,9 +158,74 @@ public class TwoSum {
         return count;
     }
 
+    // TRY WITH ARRAY INSTEAD OF HASHMAP fourSumCount;
     // ================================================================================================================
 
-    
+    // 658
+    public static int insertPosition(int[] arr, int data) {
+
+        int n = arr.length, si = 0, ei = n - 1;
+        int idx = 0;
+        while (si <= ei) {
+            int mid = (si + ei) / 2;
+            if (arr[mid] <= data)
+                si = mid + 1;
+            else
+                ei = mid - 1;
+        }
+
+        return si; // insert Pos => si, Last Index => (si - 1);
+    }
+
+    public List<Integer> findClosestElements(int[] arr, int k, int x) {
+
+        List<Integer> ans = new ArrayList<>();
+        for (int ele : arr) {
+            ans.add(ele);
+        }
+        int n = arr.length;
+        if (x < arr[0])
+            return ans.subList(0, k);
+        else if (x > arr[n - 1])
+            return ans.subList(n - k, n);
+        else {
+            int idx = insertPosition(arr, x);
+            int lr = Math.max(0, idx - k);
+            int rr = Math.min(n - 1, idx + k);
+
+            while ((rr - lr + 1) > k) {
+                if (x - arr[lr] > arr[rr] - x)
+                    lr++;
+                else
+                    rr--;
+            }
+
+            return ans.subList(lr, rr + 1);
+        }
+    }
+
+    // Alternative:-
+    public List<Integer> findClosestElementsAlternative(int[] arr, int k, int x) {
+        LinkedList<Integer> ret = new LinkedList<Integer>();
+        int left = 0;
+        int right = arr.length - k;
+        int mid;
+        while (left < right) {
+            mid = (left + right) / 2;
+            if (x - arr[mid] > arr[mid + k] - x) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        for(int i=left; i<left+k;i++){
+            ret.add(arr[i]);
+        }        
+        return ret;  
+    }
+
+    // ================================================================================================================
+
     public static void main(String[] args) {
 
         int[] arr = { -1, -1, 2, 3, 3, 4, 4, 4, 5, 6, 6, 7, 9, 9 };
