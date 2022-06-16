@@ -200,6 +200,7 @@ public class BinarySearch {
         return a + b + c;
     }
 
+    // Better Code Available on Rajneesh-git...
     private static int mergeTwoSortedArray(long[] arr, int si, int mid, int ei) {
 
         int n = (int) (mid - si + 1);
@@ -240,14 +241,98 @@ public class BinarySearch {
         return count;
     }
 
-    // Better Code Available on Rajneesh-git
-    
+    // 33
+    public int searchinRotated(int[] arr, int data) {
+        int n = arr.length, si = 0, ei = n - 1;
+        while (si <= ei) {
+            int mid = (si + ei) / 2;
+            if (arr[mid] == data)
+                return mid;
+            else if (arr[si] <= arr[mid]) {
+                if (data >= arr[si] && data < arr[mid])
+                    ei = mid - 1;
+                else
+                    si = mid + 1;
+            } else {
+                if (arr[mid] < data && data <= arr[ei])
+                    si = mid + 1;
+                else
+                    ei = mid - 1;
+            }
+        }
+        return -1;
+    }
+
+    // 81 CHECK FOR TCs: [1, 0, 1, 1, 1];
+    public boolean searchinRotatedDuplicates(int[] arr, int data) {
+        int n = arr.length, si = 0, ei = n - 1;
+        while (si <= ei) {
+            int mid = (si + ei) / 2;
+            if (arr[mid] == data || arr[si] == data)
+                return true;
+            else if (arr[si] < arr[mid]) {
+                if (data >= arr[si] && data < arr[mid])
+                    ei = mid - 1;
+                else
+                    si = mid + 1;
+            } else if (arr[mid] < arr[ei]) {
+                if (arr[mid] < data && data <= arr[ei])
+                    si = mid + 1;
+                else
+                    ei = mid - 1;
+            } else
+                si++;
+        }
+        return false;
+    }
+
+    // MUST CHECK ALL THE BINARY SEARCH TYPE PROBLEM WITH 2 SIZED ARRAY
+    // 153
+    public static int findMin(int[] arr) {
+
+        int min = (int) 1e9, n = arr.length, si = 0, ei = n - 1;
+        while (si <= ei) {
+            int mid = (si + ei) / 2;
+            if (arr[si] <= arr[mid]) {
+                min = arr[si];
+                si = mid + 1;
+            } else {
+                min = arr[mid];
+                ei = mid - 1;
+            }
+        }
+
+        return min;
+    }
+
+    // 154
+    public static int findMinII(int[] arr) {
+
+        int min = (int) 1e9, n = arr.length, si = 0, ei = n - 1;
+        while (si <= ei) {
+            int mid = (si + ei) / 2;
+            if (arr[si] < arr[mid]) {
+                min = Math.min(arr[si], min);
+                si = mid + 1;
+            } else if (arr[mid] < arr[ei]) {
+                min = Math.min(arr[mid], min);
+                ei = mid - 1;
+            } else {
+                min = Math.min(min, arr[si]);
+                si += 1;
+            }
+        }
+        return min;
+    }
+
     public static void main(String[] args) {
-        // int[] arr = { 3, 3, 3, 9, 12, 12, 12, 19, 19, 19, 19 };
-        long[] arr = { 2, 4, 1, 3, 5 };
-        System.out.println(inversionCount(arr, arr.length));
+        int[] arr = { 3, 3, 3, 9, 12, 12, 12, 19, 19, 19, 19 };
+        // long[] arr = { 2, 4, 1, 3, 5 };
+        int[] narr = { 1, 0, 1, 1, 1 };
+        // System.out.println(inversionCount(arr, arr.length));
         // System.out.println(binarySearch(arr, 3));
         // display(searchRange(arr, 19));
         // System.out.println(nearestElement(arr, 11));
+        System.out.println(findMinII(narr));
     }
 }
