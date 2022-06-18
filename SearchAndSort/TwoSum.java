@@ -1,5 +1,4 @@
 // package SearchAndSort;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -204,8 +203,9 @@ public class TwoSum {
         }
     }
 
-    // Alternative:-
-    public List<Integer> findClosestElementsAlternative(int[] arr, int k, int x) {
+    // Alternative:- DRY RUN THIS...
+    // Time Complexity:- O(log(n) + K) 
+    public List<Integer> findClosestElements_02(int[] arr, int k, int x) {
         LinkedList<Integer> ret = new LinkedList<Integer>();
         int left = 0;
         int right = arr.length - k;
@@ -222,6 +222,31 @@ public class TwoSum {
             ret.add(arr[i]);
         }
         return ret;
+    }
+    // ================================================================================================================
+
+    // 300
+    // public int lengthOfLIS(int [] arr){
+            // Done in New File.
+    // }
+    
+    public static int[] twoRepeated(int arr[], int N){
+        // Your code here
+        ArrayList<Integer> ans = new ArrayList<>();
+        
+        for(int i = 0; i < arr.length; i++){
+            int ele = Math.abs(arr[i]);
+            if(arr[ele - 1] < 0){
+                ans.add(ele);
+                if(ans.size() == 0) break;
+            } else{
+                arr[ele - 1] = -arr[ele - 1];
+            }
+        }
+        int [] res = new int[2];
+        res[0] = ans.get(0);
+        res[1] = ans.get(1);
+        return res;
     }
 
     // ================================================================================================================
@@ -241,6 +266,9 @@ public class TwoSum {
         // System.out.println(values.get(0) + " " + values.get(1) + " " +
         // values.get(2));
         // }
+
+        int [] temp = new int[]{4, 3, 2, 3, 1, 1};
+        twoRepeated(temp, 4);
     }
 
 }
