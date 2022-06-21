@@ -199,7 +199,7 @@ public class TwoSum {
                     rr--;
             }
 
-            return ans.subList(lr, rr + 1);
+            return ans.subList(lr, lr + k);
         }
     }
 

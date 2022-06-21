@@ -1,4 +1,4 @@
-package SearchAndSort;
+// package SearchAndSort;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,19 +30,21 @@ public class LIS {
         int n = al.size(), si = 0, ei = n - 1;
         while (si <= ei) {
             int mid = (si + ei) / 2;
-            if (al.get(mid) <= ele) {
-                si = mid + 1;
-            } else
+            if (ele <= al.get(mid))
                 ei = mid - 1;
+            else
+                si = mid + 1;
         }
-
-        return si; // When ele is greater than all element of ArrayList, then it will return the
+        int insertPos = si;
+        int lastIdx = si - 1;
+        return lastIdx >= 0 && al.get(lastIdx) == ele ? lastIdx : si; // When ele is greater than all element of ArrayList, then it will return the
                    // size of (al);
     }
 
     public static void main(String[] args) {
 
-        int[] arr = { 0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15, 14 };
+        // int[] arr = { 0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15, 14 };
+        int [] arr = {7, 7, 7};
         System.out.println(longestIncreasingSubsequence(arr));
     }
 }

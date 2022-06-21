@@ -75,10 +75,14 @@ public class TargetSet {
     /**
      * Question - Combination wale question me 2 variable change ho rhe hai to
      * hamare knowledge ke hisab se, isme 2D DP lagni chahiye, lakin duniya isme 1D
-     * dp, Kyun use karti hai? WO KYA LOGIC KI HAI DUNIYA 2D SE 1D PE PAHUCH GAYI ?
+     * dp, Kyun use karti hai?
+     * <b>WO KYA LOGIC KI HAI DUNIYA 2D SE 1D PE PAHUCH GAYI?</b>
+     * <p>
      * I have solved this question using 2D array.
-     * Solution:- Kyunki isme hame sum krna hota jo hum 2D ki 1D me bhi kr skte
-     * hai...
+     * <p>
+     * 
+     * @categorySolution Kyunki isme hame sum krna hota jo hum 2D ki jagah 1D me bhi
+     *                   kr skte hai...
      * 
      * @param arr :- no of coins
      * @param n   :- ending index of array
@@ -158,32 +162,33 @@ public class TargetSet {
         return dp[N][Tar];
     }
 
-    public static int targetSum_BackEng(int [] arr, int N, int Tar, int [][] dp, String psf){
-        if(N == 0 || Tar == 0){
-            if(Tar == 0){
+    public static int targetSum_BackEng(int[] arr, int N, int Tar, int[][] dp, String psf) {
+        if (N == 0 || Tar == 0) {
+            if (Tar == 0) {
                 System.out.println(psf);
                 return 1;
             }
             return 0;
         }
         int count = 0;
-        if(Tar - arr[N-1] >= 0 && dp[N-1][Tar - arr[N-1]] == 1){
-            count += targetSum_BackEng(arr, N-1, Tar - arr[N-1], dp, psf + arr[N-1] + " ");
+        if (Tar - arr[N - 1] >= 0 && dp[N - 1][Tar - arr[N - 1]] == 1) {
+            count += targetSum_BackEng(arr, N - 1, Tar - arr[N - 1], dp, psf + arr[N - 1] + " ");
         }
-        if(dp[N-1][Tar] == 1){
-            count += targetSum_BackEng(arr, N-1, Tar, dp, psf);
+        if (dp[N - 1][Tar] == 1) {
+            count += targetSum_BackEng(arr, N - 1, Tar, dp, psf);
         }
         return count;
     }
 
     public static int targetSum() {
-        int[] arr = { 2, 3, 5, 7};
+        int[] arr = { 2, 3, 5, 7 };
         int tar = 10, n = arr.length;
         int[][] dp = new int[n + 1][tar + 1];
         // fill(dp, -1);
         // int ans = targetSum(arr, n, tar, dp);
         int ans = targetSumDP(arr, n, tar, dp);
-        System.out.println(targetSum_BackEng(arr, n, tar, dp, ""));
+        // System.out.println(targetSum_BackEng(arr, n, tar, dp, ""));
+        display(dp);
         return ans;
     }
 
