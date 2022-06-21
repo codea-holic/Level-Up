@@ -1,5 +1,4 @@
 // package SearchAndSort;
-
 import java.lang.String;
 
 // Conceptual Binary Search Problem Video 006
@@ -43,10 +42,11 @@ public class Leetcode006 {
         return false;
     }
 
+    // IMPORTANT Question:-
     public static double maxAreaServingCake(int[] radius, int guests) {
 
-        double si = 1.0, ei = (double) 1e4;
-        while (si < ei) {
+        double si = 0.0001, ei = (double) 1e4;
+        while ((ei - si) > 0.0001) {
             double mid = (si + ei) / 2.0;
             if (isPossibleToServeCake(radius, mid, guests)) {
                 si = mid;
@@ -129,6 +129,8 @@ public class Leetcode006 {
 
     }
 
+    // 774
+    
     public static void main(String[] args) {
         int[] radius1 = { 1, 1, 1, 1, 2, 2, 3 };
         int[] radius2 = { 4, 3, 3 };
