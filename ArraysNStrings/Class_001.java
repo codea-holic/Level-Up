@@ -1,4 +1,6 @@
+
 // package ArraysNStrings;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -96,14 +98,17 @@ public class Class_001 {
         return max;
     }
 
-    // 11. OR https://practice.geeksforgeeks.org/problems/container-with-most-water0535/1/
+    // 11. OR
+    // https://practice.geeksforgeeks.org/problems/container-with-most-water0535/1/
     public static int maxArea(int[] height) {
         int maxWater = 0;
         int i = 0, j = height.length - 1;
-        while(i < j){
-            maxWater = Math.max(Math.min(height[i], height[j]) * (j-i), maxWater);
-            if(height[i] < height[j]) i++;
-            else j--;
+        while (i < j) {
+            maxWater = Math.max(Math.min(height[i], height[j]) * (j - i), maxWater);
+            if (height[i] < height[j])
+                i++;
+            else
+                j--;
         }
         return maxWater;
     }
@@ -114,13 +119,13 @@ public class Class_001 {
         // Frequency of Set is Atomized O(1), not exactly O(1).
         int i = 0, j = 0, n = s.length();
         int maxLen = 0;
-        while(j < n){
-            if(set.size() == 0 && !set.contains(s.charAt(j))){
+        while (j < n) {
+            if (set.size() == 0 && !set.contains(s.charAt(j))) {
                 set.add(s.charAt(j));
                 maxLen = Math.max(maxLen, j - i + 1);
                 j++;
-            } else{
-                while(i < j && set.contains(s.charAt(j))){
+            } else {
+                while (i < j && set.contains(s.charAt(j))) {
                     set.remove(s.charAt(i++));
                 }
             }
@@ -130,83 +135,154 @@ public class Class_001 {
 
     // Cramp this way of Code for these type of Question
     public int lengthOfLongestSubstring(String s, int N) {
-        
-        int [] freq = new int[128];
-        int n = s.length(), si = 0, ei = 0, count = 0, len = 0;
-        while(ei < n){
-            if(freq[s.charAt(ei++)]++ > 0) count++;
 
-            while(count > 0)
-            if(freq[s.charAt(si++)]-- == 1) count--;
+        int[] freq = new int[128];
+        int n = s.length(), si = 0, ei = 0, count = 0, len = 0;
+        while (ei < n) {
+            if (freq[s.charAt(ei++)]++ > 0)
+                count++;
+
+            while (count > 0)
+                if (freq[s.charAt(si++)]-- == 1)
+                    count--;
 
             len = Math.max(len, ei - si);
         }
         return len;
     }
-    
+
     // Follow up:-
-    
+
     // 159. Length of Longest Substring with Two Distinct Character.
     public int lengthOfLongestSubstringWithTwoDistinctChar(String s) {
-        
-        int [] freq = new int[128];
-        int n = s.length(), si = 0, ei = 0, count = 0, len = 0;
-        while(ei < n){
-            if(freq[s.charAt(ei++)]++ == 0) count++;
 
-            while(count > 2)
-            if(freq[s.charAt(si++)]-- > 1) count--;
+        int[] freq = new int[128];
+        int n = s.length(), si = 0, ei = 0, count = 0, len = 0;
+        while (ei < n) {
+            if (freq[s.charAt(ei++)]++ == 0)
+                count++;
+
+            while (count > 2)
+                if (freq[s.charAt(si++)]-- > 1)
+                    count--;
 
             len = Math.max(len, ei - si);
         }
         return len;
     }
 
-    
     // 76.
     public static String minWindow(String s, String t) {
-        if(s.length() < t.length()) return "";
+        if (s.length() < t.length())
+            return "";
 
-        int [] freq = new int[128];
-        int ns = s.length(), nt = t.length(), count = nt, si = 0, ei = 0, len = (int)1e9, gsi = 0;
-        for(int i = 0; i < nt; i++){
+        int[] freq = new int[128];
+        int ns = s.length(), nt = t.length(), count = nt, si = 0, ei = 0, len = (int) 1e9, gsi = 0;
+        for (int i = 0; i < nt; i++) {
             freq[t.charAt(i)]++;
         }
-        while(ei < ns){
-            if(freq[s.charAt(ei++)]-- > 0) count--;
+        while (ei < ns) {
+            if (freq[s.charAt(ei++)]-- > 0)
+                count--;
 
-            while(count == 0){
-                if(ei - si < len){
+            while (count == 0) {
+                if (ei - si < len) {
                     len = ei - si;
                     gsi = si;
                 }
 
-                if(freq[s.charAt(si++)]++ == 0) count++;
+                if (freq[s.charAt(si++)]++ == 0)
+                    count++;
             }
         }
 
         return s.substring(gsi, gsi + len);
     }
 
-    
-    // 340.
-    
+    // 340. OR
+    // https://practice.geeksforgeeks.org/problems/longest-k-unique-characters-substring0853/1/
+    public static int lengthOfLongestSubstringKDistinct(String s, int k) {
+
+        int n = s.length(), count = k, si = 0, ei = 0, len = -1;
+        int[] freq = new int[128];
+
+        while (ei < n) {
+            if (freq[s.charAt(ei++)]++ == 0)
+                count--;
+            while (count < 0) {
+                if (freq[s.charAt(si++)]-- == 1)
+                    count++;
+            }
+            if (count == 0) {
+                len = Math.max(len, ei - si);
+            }
+        }
+        return len;
+    }
+
+    // https://practice.geeksforgeeks.org/problems/smallest-distant-window3132/1/
+    public static int findSubString(String str) {
+
+        int[] freq = new int[128];
+        int n = str.length(), count = 0;
+        for (int i = 0; i < n; i++) {
+            if (freq[str.charAt(i)]++ == 0)
+                count++;
+        }
+        Arrays.fill(freq, 0);
+        int si = 0, ei = 0, len = (int) 1e9, gsi = 0;
+        while (ei < n) {
+            if (freq[str.charAt(ei++)]++ == 0)
+                count--;
+            while (count == 0) {
+                len = Math.min(len, ei - si);
+                if (freq[str.charAt(si++)]-- == 1)
+                    count++;
+            }
+        }
+        return len;
+    }
+
+    // 1456.
+    public int maxVowels(String s, int k) {
+
+        int si = 0, ei = 0, n = s.length(), vowelCount = 0, maxVowelCount = 0;
+        while (ei < n) {
+            if (isVowel(s.charAt(ei++)))
+                vowelCount++;
+
+            if(ei - si == k){
+                maxVowelCount = Math.max(vowelCount, maxVowelCount);
+                if(isVowel(s.charAt(si++))) vowelCount--;
+            }
+        }
+
+        return maxVowelCount;
+    }
+
+    private boolean isVowel(char ch) {
+        return ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u';
+    }
+
+    // Count all SubArray with atmost K Different Intgers
+
+    // 1248.
+
     // 992.
-
-
-    
     public static void main(String[] args) {
-        int[] arr1 = { 1, -2, 3, 0, -5, 6, -7, -8, 9, 10 };
+        // int[] arr1 = { 1, -2, 3, 0, -5, 6, -7, -8, 9, 10 };
         // rotateArr(arr1, -3);
         // segregateNegativePositive(arr1);
-        int[] arr2 = new int[] { 0, 1, 1, 0, 0, 0, 1, 1, 0, 1 };
-        int[] arr3 = new int[] { 2, 2, 2, 2, 2, 2, 0, 0, 0 };
+        // int[] arr2 = new int[] { 0, 1, 1, 0, 0, 0, 1, 1, 0, 1 };
+        // int[] arr3 = new int[] { 2, 2, 2, 2, 2, 2, 0, 0, 0 };
         // segregate01(arr2);
         // segregate012(arr3);
         // display(arr3);
-        String s = "ADOBECODEBANC";
-        String t = "ABC";
-        System.out.println(minWindow(s, t));
+        // String s = "ADOBECODEBANC";
+        // String t = "ABC";
+        // System.out.println(minWindow(s, t));
+        // System.out.println(findSubString("CCCbAbbBbbCDd"));
+        System.out.println(lengthOfLongestSubstringKDistinct("CCCbAbbbbbbBbbCDd", 2));
     }
 
 }
