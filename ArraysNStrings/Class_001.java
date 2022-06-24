@@ -1,9 +1,12 @@
-
 // package ArraysNStrings;
+
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
+// Sliding Window
 public class Class_001 {
 
     public static void display(int[] arr) {
@@ -251,9 +254,10 @@ public class Class_001 {
             if (isVowel(s.charAt(ei++)))
                 vowelCount++;
 
-            if(ei - si == k){
+            if (ei - si == k) {
                 maxVowelCount = Math.max(vowelCount, maxVowelCount);
-                if(isVowel(s.charAt(si++))) vowelCount--;
+                if (isVowel(s.charAt(si++)))
+                    vowelCount--;
             }
         }
 
@@ -265,10 +269,93 @@ public class Class_001 {
     }
 
     // Count all SubArray with atmost K Different Intgers
+    private static int atMostKDistinct(int[] arr, int k) {
+        int si = 0, ei = 0, n = arr.length, count = 0, ans = 0, num = 2 * (int) 1e5 + 1;
+        int[] freq = new int[num];
+        while (ei < n) {
+            if(freq[arr[ei++]]++ == 0) count++;
 
-    // 1248.
+            while(count > k){
+                if(freq[arr[si++]]-- == 1) count--;
+            }
+
+            ans += (ei - si);
+        }
+        return ans;
+    }
 
     // 992.
+    public static int subarraysWithKDistinct(int[] arr, int k) {
+        return atMostKDistinct(arr, k) - atMostKDistinct(arr, k - 1);
+    }
+
+    // 1248.
+    public int numberOfSubarrays(int[] arr, int k) {  
+        return atMostKOddInteger(arr, k) - atMostKOddInteger(arr, k-1);
+    }
+    
+    private int atMostKOddInteger(int [] arr, int k){
+        
+        int si = 0, ei = 0, count = 0, countSubArray = 0;
+        int n = arr.length;
+        while(ei < n){
+            if(arr[ei++] % 2 != 0) count++;
+            
+            while(count > k){
+                if(arr[si++] % 2 != 0) count--;
+            }
+            
+            countSubArray += (ei - si);
+        }
+        
+        return countSubArray;
+    }
+
+    // 395.
+
+
+    // 904. 
+    // Actually this is the question of subarray with at Most 2 distinct Integer.
+    public int totalFruit(int[] fruits) {
+        
+        int [] freq = new int[100000 + 1];
+        int si = 0, ei = 0, n = fruits.length, len = 0, count = 0;
+        
+        while(ei < n){
+            if(freq[fruits[ei++]]++ == 0) count++;
+            
+            while(count > 2)
+                if(freq[fruits[si++]]-- == 1) count--;
+            
+            len = Math.max(len, ei - si);
+        }
+        
+        return len;
+    }
+
+    // 930
+    public static int numSubarraysWithSum(int[] nums, int goal) {
+        // what if goal == 0
+        if(goal == 0) return countSubArrAtMostGoal(nums, goal);
+        return countSubArrAtMostGoal(nums, goal) - countSubArrAtMostGoal(nums, goal - 1);
+    }
+    
+    private static int countSubArrAtMostGoal(int [] arr, int g){
+        
+        int si = 0, ei = 0, n = arr.length, countSubArr = 0, count = 0;
+        while(ei < n){
+            if(arr[ei++] == 1) count++;
+            
+            while(count > g){
+                if(arr[si++] == 1) count--;
+            }
+            
+            countSubArr += (ei - si);
+        }
+        return countSubArr;
+    }
+
+
     public static void main(String[] args) {
         // int[] arr1 = { 1, -2, 3, 0, -5, 6, -7, -8, 9, 10 };
         // rotateArr(arr1, -3);
@@ -282,7 +369,11 @@ public class Class_001 {
         // String t = "ABC";
         // System.out.println(minWindow(s, t));
         // System.out.println(findSubString("CCCbAbbBbbCDd"));
-        System.out.println(lengthOfLongestSubstringKDistinct("CCCbAbbbbbbBbbCDd", 2));
+        // System.out.println(lengthOfLongestSubstringKDistinct("CCCbAbbbbbbBbbCDd", 2));
+        // int [] nums = {1, 2, 1, 2, 3};
+        // System.out.println(subarraysWithKDistinct(nums, 2));
+        int [] nums = {0, 0, 0, 0, 0};
+        System.out.println(numSubarraysWithSum(nums, 0));
     }
 
 }
