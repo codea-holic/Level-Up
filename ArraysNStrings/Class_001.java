@@ -1,4 +1,4 @@
-// package ArraysNStrings;
+package ArraysNStrings;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -14,6 +14,7 @@ public class Class_001 {
         for (int ele : arr) {
             System.out.print(ele + " ");
         }
+        System.out.println();
     }
 
     // https://practice.geeksforgeeks.org/problems/rotate-array-by-n-elements-1587115621/1/
@@ -273,10 +274,12 @@ public class Class_001 {
         int si = 0, ei = 0, n = arr.length, count = 0, ans = 0, num = 2 * (int) 1e5 + 1;
         int[] freq = new int[num];
         while (ei < n) {
-            if(freq[arr[ei++]]++ == 0) count++;
+            if (freq[arr[ei++]]++ == 0)
+                count++;
 
-            while(count > k){
-                if(freq[arr[si++]]-- == 1) count--;
+            while (count > k) {
+                if (freq[arr[si++]]-- == 1)
+                    count--;
             }
 
             ans += (ei - si);
@@ -290,72 +293,207 @@ public class Class_001 {
     }
 
     // 1248.
-    public int numberOfSubarrays(int[] arr, int k) {  
-        return atMostKOddInteger(arr, k) - atMostKOddInteger(arr, k-1);
+    public int numberOfSubarrays(int[] arr, int k) {
+        return atMostKOddInteger(arr, k) - atMostKOddInteger(arr, k - 1);
     }
-    
-    private int atMostKOddInteger(int [] arr, int k){
-        
+
+    private int atMostKOddInteger(int[] arr, int k) {
+
         int si = 0, ei = 0, count = 0, countSubArray = 0;
         int n = arr.length;
-        while(ei < n){
-            if(arr[ei++] % 2 != 0) count++;
-            
-            while(count > k){
-                if(arr[si++] % 2 != 0) count--;
+        while (ei < n) {
+            if (arr[ei++] % 2 != 0)
+                count++;
+
+            while (count > k) {
+                if (arr[si++] % 2 != 0)
+                    count--;
             }
-            
+
             countSubArray += (ei - si);
         }
-        
+
         return countSubArray;
     }
 
     // 395.
 
-
-    // 904. 
+    // 904.
     // Actually this is the question of subarray with at Most 2 distinct Integer.
     public int totalFruit(int[] fruits) {
-        
-        int [] freq = new int[100000 + 1];
+
+        int[] freq = new int[100000 + 1];
         int si = 0, ei = 0, n = fruits.length, len = 0, count = 0;
-        
-        while(ei < n){
-            if(freq[fruits[ei++]]++ == 0) count++;
-            
-            while(count > 2)
-                if(freq[fruits[si++]]-- == 1) count--;
-            
+
+        while (ei < n) {
+            if (freq[fruits[ei++]]++ == 0)
+                count++;
+
+            while (count > 2)
+                if (freq[fruits[si++]]-- == 1)
+                    count--;
+
             len = Math.max(len, ei - si);
         }
-        
+
         return len;
     }
 
     // 930
     public static int numSubarraysWithSum(int[] nums, int goal) {
         // what if goal == 0
-        if(goal == 0) return countSubArrAtMostGoal(nums, goal);
+        if (goal == 0)
+            return countSubArrAtMostGoal(nums, goal);
         return countSubArrAtMostGoal(nums, goal) - countSubArrAtMostGoal(nums, goal - 1);
     }
-    
-    private static int countSubArrAtMostGoal(int [] arr, int g){
-        
+
+    private static int countSubArrAtMostGoal(int[] arr, int g) {
+
         int si = 0, ei = 0, n = arr.length, countSubArr = 0, count = 0;
-        while(ei < n){
-            if(arr[ei++] == 1) count++;
-            
-            while(count > g){
-                if(arr[si++] == 1) count--;
+        while (ei < n) {
+            if (arr[ei++] == 1)
+                count++;
+
+            while (count > g) {
+                if (arr[si++] == 1)
+                    count--;
             }
-            
+
             countSubArr += (ei - si);
         }
         return countSubArr;
     }
 
+    // 485
+    public int findMaxConsecutiveOnes(int[] nums) {
 
+        int ei = 0, count = 0, len = 0;
+        int n = nums.length;
+        while (ei < n) {
+            if (nums[ei] == 1)
+                count++;
+
+            if (nums[ei++] == 0) {
+                len = Math.max(len, count);
+                count = 0;
+            }
+        }
+
+        return Math.max(len, count);
+    }
+
+    // 487. Given a binary array nums, return the maximum number of consecutive 1's
+    // in the array if you can flip at most one '0'
+    public int findMaxConsecutiveOnesFlip(int[] nums) {
+
+        int n = nums.length, si = 0, ei = 0, len = 0, count = 0;
+        while (ei < n) {
+            if (nums[ei++] == 0)
+                count++;
+
+            while (count > 1)
+                if (nums[si++] == 0)
+                    count--;
+
+            len = Math.max(len, si - ei);
+        }
+
+        return len;
+    }
+
+    // 1004
+    public int longestOnes(int[] nums, int k) {
+
+        int n = nums.length, si = 0, ei = 0, len = 0, count = 0;
+
+        while (ei < n) {
+            if (nums[ei++] == 0)
+                count++;
+
+            while (count > k)
+                if (nums[si++] == 0)
+                    count--;
+
+            len = Math.max(len, ei - si);
+        }
+
+        return len;
+    }
+
+    // 974
+    public static int subarraysDivByK(int[] nums, int k) {
+
+        int[] rem = new int[k];
+        int count = 0, ei = 0, sum = 0, n = nums.length;
+        rem[0] = 1; // kyunki pehli bar hi 0 aane ka mtlb yeh hai ki, wahan tak independently (0,
+                    // idx) k se divisible hai
+        while (ei < n) {
+            sum += nums[ei++];
+            int r = (sum % k + k) % k;
+            count += rem[r]++;
+        }
+        return count;
+    }
+
+    // Follow up:- Find longest SubArray Divisible By K
+    public static  int  longestSubArrayDivByK(int[] nums, int k) {
+
+        int[] rem = new int[k];
+        int len = 0, ei = 0, sum = 0, n = nums.length;
+        Arrays.fill(rem, -2); // Explained in Video-4 @ 2:38:00
+        rem[0] = -1;
+        while (ei < n) {
+            sum += nums[ei++];
+            int r = (sum % k + k) % k;
+
+            if (rem[r] == -2)
+                rem[r] = ei;
+            else
+                len = Math.max(len, ei - rem[r]);
+        }
+        return len;
+    }
+
+
+    // https://practice.geeksforgeeks.org/problems/count-subarrays-with-equal-number-of-1s-and-0s-1587115620/1
+    public int countSubarrWithEqualZeroAndOne(int arr[], int n)
+    {
+        // add your code here
+        // Replace all 0's with -1's
+        HashMap<Integer, Integer> fmap = new HashMap<>();
+        // HashMap ka use to krna hi padega kyunki hame pata nhi hai ki range knha tak jayega
+        int ei = 0, count = 0, sum = 0;
+        fmap.put(0, 1);
+        
+        while(ei < n){
+            sum = sum + (arr[ei++] == 1 ? 1 : -1);
+            int sumVal = fmap.getOrDefault(sum, 0);
+            count += sumVal;
+            fmap.put(sum, sumVal + 1);
+        }
+        
+        return count;
+    }
+
+    public static int maxLen(int[] arr, int n){
+        // Your code here
+        HashMap<Integer, Integer> idxMap = new HashMap<>();
+        int ei = 0, sum = 0, len = 0;
+        idxMap.put(0, -1);
+        while(ei < n){
+            sum = sum + (arr[ei] == 1 ? 1 : -1);
+            int idx = idxMap.getOrDefault(sum, -2); // -2 indicate that not found
+            if(idx == -2){
+                idxMap.put(sum, ei);
+            } else{
+                len = Math.max(len, ei - idx);
+            }
+            ei++;
+        }
+        return len;
+    }
+
+    
     public static void main(String[] args) {
         // int[] arr1 = { 1, -2, 3, 0, -5, 6, -7, -8, 9, 10 };
         // rotateArr(arr1, -3);
@@ -369,11 +507,18 @@ public class Class_001 {
         // String t = "ABC";
         // System.out.println(minWindow(s, t));
         // System.out.println(findSubString("CCCbAbbBbbCDd"));
-        // System.out.println(lengthOfLongestSubstringKDistinct("CCCbAbbbbbbBbbCDd", 2));
+        // System.out.println(lengthOfLongestSubstringKDistinct("CCCbAbbbbbbBbbCDd",
+        // 2));
         // int [] nums = {1, 2, 1, 2, 3};
         // System.out.println(subarraysWithKDistinct(nums, 2));
-        int [] nums = {0, 0, 0, 0, 0};
-        System.out.println(numSubarraysWithSum(nums, 0));
+        // int[] nums = { 0, 0, 0, 0, 0 };
+        // System.out.println(numSubarraysWithSum(nums, 0));
+        // int[] arr = { 4, 5, 4, 2, -4, 6, 6, -2, 3, 1, 2, 2, 5, 2, -2 };
+        // int[] arr2 = { 4, 5, 0, -2, -3, 1 };
+        // System.out.println(longestSubArrayDivByK(arr, 5));
+        int [] nums = {1, 0, 0, 0, 1, 1, 0, 1, 0};
+        System.out.println(maxLen(nums, 9));
+
     }
 
 }

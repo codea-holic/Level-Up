@@ -63,7 +63,6 @@ public class April_6th {
             }
             used[i] = false;
         }
-
     }
 
     // mask = 1 << (n+1);
