@@ -650,11 +650,12 @@ public class TwoPointer {
     // 91. Decode Ways
     static public int numDecodings(String s) {
         // System.out.println(decodeWays_recr(s, ""));
+        s = "246";
         int n = s.length();
-        long[] dp = new long[6 + 1];
-        Arrays.fill(dp, 0);
-        // System.out.println(decodeWays_DP(s, n, dp));
-        System.out.print(decodeWaysExtended("*1*1*0", 0, dp));
+        int[] dp = new int[n + 1];
+        Arrays.fill(dp, -1);
+        System.out.println(decodeWays_memo(s, 0, dp));
+        // System.out.print(decodeWaysExtended("*1*1*0", 0, dp));
         // display(dp);
         return 0;
     }
@@ -868,11 +869,11 @@ public class TwoPointer {
     public static void main(String[] args) {
         // tribonacci();
         // climbStairs();
-        goldmine();
+        // goldmine();
         // display(dp);
         // mazePath();
         // uniquePaths();
-        // numDecodings("226");
+        numDecodings("226");
         // partition();
     }
 }

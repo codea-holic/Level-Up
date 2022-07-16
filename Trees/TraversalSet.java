@@ -240,4 +240,83 @@ class TraversalSet {
         }
         return ans;
     }
+
+    // Kth Largest Element in Binary Search Tree using Morris Traversal...
+    // https://practice.geeksforgeeks.org/problems/kth-largest-element-in-bst/1/
+    /* IMPORTANT  !!! */
+    public int kthLargest(TreeNode root,int k)
+    {
+        //Your code here
+        TreeNode curr = root;
+        int ans = -1;
+        while(curr != null){
+            TreeNode rightNode = curr.right;
+            if(rightNode == null){
+                // check
+                if(k > 0){
+                    k--;
+                    ans = curr.val;
+                }
+                curr = curr.left;
+            } else{
+                TreeNode leftMost = getLeftMostNode(rightNode, curr);
+                if(leftMost.left == null){ // Thread creation block
+                    leftMost.left = curr;
+                    curr = curr.right;
+                } else{
+                    leftMost.left = null;
+                    if(k > 0){
+                        k--;
+                        ans = curr.val;
+                    }
+                    curr = curr.left;
+                }
+            }
+        }
+        return ans;
+    }
+    
+    private TreeNode getLeftMostNode(TreeNode node, TreeNode curr){
+        while(node.left != null && node.left != curr)
+            node = node.left;
+        return node;
+    }
+
+    // Convert Binary Search Tree to Doubly Linked List -> In place [O(1) space].
+    // https://practice.geeksforgeeks.org/problems/binary-tree-to-dll/1/
+    TreeNode bToDLL(TreeNode root){
+    	//  Your code here
+    	TreeNode curr = root;
+    	TreeNode dummy = new TreeNode(-1);
+    	TreeNode prev = dummy;
+    	
+    	while(curr != null){
+    	    TreeNode leftNode = curr.left;
+    	    if(curr.left == null){
+    	        curr.left = prev;
+	            prev.right = curr;
+	            prev = curr;
+	            
+	            curr = curr.right;
+    	    } else{
+    	        TreeNode rightMost = getRightMostNode(leftNode, curr);
+    	        if(rightMost.right == null) { // Thread Creation...
+    	            rightMost.right = curr;
+    	            curr = curr.left;
+    	        } else{ // Thread Break
+    	            rightMost.right = null;
+    	            
+    	            curr.left = prev;
+    	            prev.right = curr;
+    	            prev = curr;
+    	            
+    	            curr = curr.right;
+    	        }
+    	    }
+    	}
+    	dummy = dummy.right;
+    	dummy.left = null;
+    	return dummy;
+    }
+
 }
