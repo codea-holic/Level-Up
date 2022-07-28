@@ -1,6 +1,5 @@
 
 public class interview {
-
     public static String entityParser(String text) {
 
         int i = 0;
