@@ -50,5 +50,20 @@ public class Question001 {
         return max;
     }
 
+    // 977. Square of Sorted Array
+    public int[] sortedSquares(int[] nums) {
+        int i = 0, n = nums.length, j = n - 1;
+        int [] result = new int[n];
+        int k = n - 1;
+        while(i <= j){
+            if(nums[i] * nums[i] < nums[j] * nums[j])
+                result[k--] = nums[j] * nums[j--];
+            else 
+                result[k--] = nums[i] * nums[i++];
+        }
+        return result;
+    }
+
+    // 556. Next Greater Element III
     
 }

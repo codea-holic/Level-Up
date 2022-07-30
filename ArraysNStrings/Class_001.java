@@ -27,9 +27,9 @@ public class Class_001 {
 
         // Alternatively,
         // k = (k % n + n) % n;
-        reverse(arr, 0, k - 1);
-        reverse(arr, k, n - 1);
         reverse(arr, 0, n - 1);
+        reverse(arr, n - k, n - 1);
+        reverse(arr, 0, n - k - 1);
     }
 
     private static void reverse(int[] arr, int si, int ei) {
