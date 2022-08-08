@@ -25,6 +25,18 @@ public class TargetSet {
             Arrays.fill(d, val);
     }
 
+    // Time Complexity - O(n^2)
+    public static int coinChangePermutation_Recr(int[] coins, int target) {
+        if (target == 0)
+            return 1;
+        int count = 0;
+        for (int coin : coins) {
+            if (target - coin >= 0)
+                count += coinChangePermutation_Recr(coins, target - coin);
+        }
+        return count;
+    }
+
     public static int coinChangePermutation_Memo(int[] arr, int tar, int[] dp) {
         if (tar == 0) {
             return dp[tar] = 1;
@@ -41,6 +53,62 @@ public class TargetSet {
         }
 
         return dp[tar] = count;
+    }
+
+    public static int coinChangeCombination_Recr(int[] coins, int target, int n) {
+        if (target <= 0) {
+            if (target == 0)
+                return 1;
+            return 0;
+        }
+
+        int count = 0;
+        for (int i = n; i >= 1; i--) {
+            if (target - coins[i - 1] >= 0) {
+                count += coinChangeCombination_Recr(coins, target - coins[i - 1], i);
+            }
+        }
+        return count;
+    }
+
+    /**
+     * Question - Combination wale question me 2 variable change ho rhe hai to
+     * hamare knowledge ke hisab se, isme 2D DP lagni chahiye, lakin duniya isme 1D
+     * dp, Kyun use karti hai?
+     * <p>
+     * <b>WO KYA LOGIC KI HAI DUNIYA 2D SE 1D PE PAHUCH GAYI?</b>
+     * <p>
+     * I have solved this question using 2D array.
+     * <p>
+     * 
+     * @categorySolution Kyunki isme hame sum krna hota jo hum 2D ki jagah 1D me bhi
+     *                   kr skte hai...
+     * 
+     * @param arr :- no of coins
+     * @param n   :- ending index of array
+     * @param tar :- target
+     * @param dp  :- Memoized Array
+     * @return Count of no. of coins
+     */
+    public static int coinChangeCombination_Memo(int[] arr, int n, int tar, int[][] dp) {
+
+        if (tar == 0) {
+            return dp[n][tar] = 1;
+        }
+
+        if (dp[n][tar] != -1)
+            return dp[n][tar];
+        int count = 0;
+
+        // loop isliye ulta chalayenge, kyunki ham jab tabulation karenge to loop L->R
+        // chala paye, jayda samjhne ke liye tabulation wala solution dekho
+        for (int i = n; i >= 0; i--) {
+            if (tar - arr[i] >= 0) {
+                count += coinChangeCombination_Memo(arr, i, tar - arr[i], dp);
+            }
+        }
+
+        return dp[n][tar] = count;
     }
 
     // 377
@@ -70,45 +138,6 @@ public class TargetSet {
             }
         }
         return dp[Tar];
-    }
-
-    /**
-     * Question - Combination wale question me 2 variable change ho rhe hai to
-     * hamare knowledge ke hisab se, isme 2D DP lagni chahiye, lakin duniya isme 1D
-     * dp, Kyun use karti hai?
-     * <b>WO KYA LOGIC KI HAI DUNIYA 2D SE 1D PE PAHUCH GAYI?</b>
-     * <p>
-     * I have solved this question using 2D array.
-     * <p>
-     * 
-     * @categorySolution Kyunki isme hame sum krna hota jo hum 2D ki jagah 1D me bhi
-     *                   kr skte hai...
-     * 
-     * @param arr :- no of coins
-     * @param n   :- ending index of array
-     * @param tar :- target
-     * @param dp  :- Memoized Array
-     * @return Count of no. of coins
-     */
-    public static int coinChangeCombination_Memo(int[] arr, int n, int tar, int[][] dp) {
-
-        if (tar == 0) {
-            return dp[n][tar] = 1;
-        }
-
-        if (dp[n][tar] != -1)
-            return dp[n][tar];
-        int count = 0;
-
-        // loop isliye ulta chalayenge, kyunki ham jab tabulation karenge to loop L->R
-        // chala paye, jayda samjhne ke liye tabulation wala solution dekh
-        for (int i = n; i >= 0; i--) {
-            if (tar - arr[i] >= 0) {
-                count += coinChangeCombination_Memo(arr, i, tar - arr[i], dp);
-            }
-        }
-
-        return dp[n][tar] = count;
     }
 
     // 322
